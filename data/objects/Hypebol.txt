@@ -1,0 +1,147 @@
+ptct: PhuongTrinh // phương trình chính tắc x^2/a^2 - y^2/b^2=1 (a,b>0, b^2=c^2-a^2)
+F1,F2: Diem // tiêu điểm F(+-c;0)
+A1,A2,B1,B2: Diem// đỉnh
+TrucThuc,TrucAo: Real// độ dài trục thực trục ảo = 2*a, 2*b
+TieuCu: Real// tiêu cự = F1F2= 2*c
+TamSai: Real// Tâm sai e = c/a>1
+y1,y2: DuongThang// đường tiệm cận: y=+-(b/a)*x
+x1,x2: DuongThang // đường chuẩn x=+-a/e
+
+
+begin_object: Hypebol;	
+begin_variables
+	A1,A2,B1,B2,F1,F2: Diem
+	TieuCu, TrucThuc, TrucAo, TamSai: Real
+	a,b,c,e: Real
+	f,ptct: PhuongTrinh
+	x,x2,y1,y2:DuongThang
+end_variables
+
+begin_constraints
+	a>0;
+	b>0;
+	c>0;
+	e>0;	
+end_constraints
+
+begin_construct_relations	
+end_construct_relations
+
+begin_properties
+end_properties
+
+begin_contruction_properties
+end_contruction_properties
+
+begin_computation_relations	
+ 	begin_relation  1
+ 		flag = 1
+		Mf    ={TieuCu, c}
+		rf    =1
+		vf   = {}
+		expf ="TieuCu=2*c"
+		cost=1
+	   end_relation
+	  begin_relation  2
+ 		flag = 1
+		Mf    ={TrucThuc, a}
+		rf    =1
+		vf   = {}
+		expf ="TrucThuc=2*a"
+		cost=1
+	   end_relation
+	  begin_relation  3
+ 		flag = 1
+		Mf    ={TrucAo, b}
+		rf    =1
+		vf   = {}
+		expf ="TrucAo=2*b"
+		cost=1
+	   end_relation 
+end_computation_relations
+
+begin_rules
+
+	begin_rule 1
+  		kind_rule = "";
+		f:PhuongTrinh
+		hypothesis_part:
+			{f}
+		end_hypothesis_part
+		goal_part:
+			{ptct}
+		end_goal_part
+		proc:ptct=Elip_ptct(f)
+	end_rule
+
+	begin_rule 2
+  		kind_rule = "xac_dinh_doi_tuong";
+		ptct:PhuongTrinh
+		hypothesis_part:
+			{ptct}
+		end_hypothesis_part
+		goal_part:
+			{"Object"}
+		end_goal_part	
+	end_rule	
+
+	begin_rule 3
+  		kind_rule = "";
+		ptct:PhuongTrinh
+		hypothesis_part:
+			{ptct}
+		end_hypothesis_part
+		goal_part:
+			{a,b}
+		end_goal_part
+		proc: a=Elip_a(ptct);
+		proc: b=Elip_b(ptct);
+	end_rule
+	
+	begin_rule 4
+  		kind_rule = "";
+		hypothesis_part:
+			{a,b}
+		end_hypothesis_part
+		goal_part:
+			{c,e}
+		end_goal_part
+		proc: c=Elip_c(a,b);
+		proc: e=Elip_tam_sai(a,b);
+	end_rule
+
+	begin_rule 5
+  		kind_rule = "";
+		hypothesis_part:
+			{a}
+		end_hypothesis_part
+		goal_part:
+			{A1=[-a,0], A2=[a,0]}
+		end_goal_part		
+	end_rule
+
+	begin_rule 6
+  		kind_rule = "";
+		hypothesis_part:
+			{b}
+		end_hypothesis_part
+		goal_part:
+			{B1=[0,-b], B2=[0,b]}
+		end_goal_part		
+	end_rule
+
+	begin_rule 7
+  		kind_rule = "";
+		hypothesis_part:
+			{c}
+		end_hypothesis_part
+		goal_part:
+			{F1=[-c,0], F2=[c,0]}
+		end_goal_part		
+	end_rule
+end_rules
+
+begin_functions    	
+end_functions
+
+end_object

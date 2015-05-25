@@ -1,0 +1,28 @@
+﻿begin_functions
+
+	Real KhoangCach(Diem,Diem){"doi_xung"}
+	PhuongTrinh DuongThang_pt2d(Diem,Diem)
+
+	PhuongTrinh Elip_ptct(PhuongTrinh){"Object"}
+	Real Elip_a(PhuongTrinh){"Object"}
+	Real Elip_b(PhuongTrinh){"Object"}
+	Real Elip_c(Real,Real){"Object"}
+	Real Elip_tam_sai(Real,Real){"Object"}
+	Diem Elip_tam(PhuongTrinh){"Object"}
+	PhuongTrinh Elip_pt2diem(Diem,Diem,Diem){"Object"}
+
+	Real DuongThang_a(PhuongTrinh){"Object"}
+	Real DuongThang_b(PhuongTrinh){"Object"}
+	Real DuongThang_c(PhuongTrinh){"Object"}
+
+end_functions
+
+	PhuongTrinh Parabol_ptct(PhuongTrinh){"Object"}
+	Diem Parabol_F(PhuongTrinh){"Object"}
+	Diem Parabol_Dinh(PhuongTrinh){"Object"}
+	Real Parabol_p(PhuongTrinh){"Object"}
+	PhuongTrinh Parabol_DuongChuan(PhuongTrinh){"Object"}
+
+
+
+

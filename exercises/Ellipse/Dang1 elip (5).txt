@@ -1,0 +1,41 @@
+﻿#--------------
+	Vd1/185[5]
+#--------------
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	
+	
+    end_objects
+
+  facts: 	
+	E.f=(4*x^2+9*y^2=36)
+   end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+
+	E.f2, E.A1,E.A2
+
+  end_goals
+
+end_exercise
+
+
+
+	
+
+	

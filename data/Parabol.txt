@@ -1,0 +1,168 @@
+f,f1: PhuongTrinh //f1 là ptct dạng y^2=2*p*x
+F:Diem// tiêu điểm
+d:DuongThang// đường chuẩn
+ThamSoTieu: real// tham số tiêu = khoảng chác từ F đến d
+S: Diem // đỉnh của parabol
+
+begin_object: Parabol;	
+begin_variables
+	S,F: Diem
+	p,ThamSoTieu: Real
+	d: PhuongTrinh
+end_variables
+
+begin_constraints
+	p>0;
+end_constraints
+
+begin_construct_relations	
+end_construct_relations
+
+begin_properties
+end_properties
+
+begin_contruction_properties
+end_contruction_properties
+
+begin_computation_relations	
+ 	begin_relation  1
+ 		flag = 1
+		Mf    ={ThamSoTieu, p}
+		rf    =1
+		vf   = {}
+		expf ="ThamSoTieu=2*c"
+		cost=1
+	   end_relation
+end_computation_relations
+
+begin_rules
+
+	begin_rule 1
+  		kind_rule = "";
+		f:PhuongTrinh
+		hypothesis_part:
+			{f}
+		end_hypothesis_part
+		goal_part:
+			{f1}
+		end_goal_part
+		proc:f1=Parabol_ptct(f)
+	end_rule
+
+	begin_rule 2
+  		kind_rule = "xac_dinh_doi_tuong";
+		hypothesis_part:
+			{f1}
+		end_hypothesis_part
+		goal_part:
+			{"Object"}
+		end_goal_part	
+	end_rule	
+
+	begin_rule 3 ???
+  		kind_rule = "xac_dinh_doi_tuong";
+		a,b:Real;
+		J:Diem;
+		hypothesis_part:
+			{a,b, J}
+		end_hypothesis_part
+		goal_part:
+			{"Object"}
+		end_goal_part		
+	end_rule
+	
+	begin_rule 4 ??
+  		kind_rule = "";
+		a,b:Real;
+		J:Diem;
+		hypothesis_part:
+			{p, J}
+		end_hypothesis_part
+		goal_part:
+			{"f1 = (x-J.x)^2/a^2 - (y-J.y)^2/b^2 = 1;"}
+		end_goal_part
+	end_rule
+	
+	begin_rule 5
+  		kind_rule = "";
+		f1:PhuongTrinh
+		hypothesis_part:
+			{f1}
+		end_hypothesis_part
+		goal_part:
+			{a,b,J}
+		end_goal_part
+		proc: a=Parabol_a(f1);
+		proc: b=Parabol_b(f1);
+		proc: J=Parabol_tam(f1);
+	end_rule
+	
+	begin_rule 6
+  		kind_rule = "";
+		hypothesis_part:
+			{a,b}
+		end_hypothesis_part
+		goal_part:
+			{c,e}
+		end_goal_part
+		proc: c=Parabol_c(a,b);
+		proc: e=Parabol_tam_sai(a,b);
+	end_rule
+
+	begin_rule 7
+  		kind_rule = "";
+		hypothesis_part:
+			{a}
+		end_hypothesis_part
+		goal_part:
+			{A1=[-a,0], A2=[a,0]}
+		end_goal_part		
+	end_rule
+
+	begin_rule 8
+  		kind_rule = "";
+		hypothesis_part:
+			{b}
+		end_hypothesis_part
+		goal_part:
+			{B1=[0,-b], B2=[0,b]}
+		end_goal_part		
+	end_rule
+
+	begin_rule 9
+  		kind_rule = "";
+		hypothesis_part:
+			{c}
+		end_hypothesis_part
+		goal_part:
+			{F1=[-c,0], F2=[c,0]}
+		end_goal_part		
+	end_rule
+end_rules
+
+begin_functions    	
+end_functions
+
+end_object
+
+// Het cau truc cua mot doi tuong Parabol		
+
+begin_rule 8
+  		kind_rule = "";
+		hypothesis_part:
+			{AlPha, BeTa}
+		end_hypothesis_part
+		goal_part:
+			{Tam=[AlPha,BeTa]}
+		end_goal_part		
+	end_rule
+begin_rule 8
+  		kind_rule = "";
+		hypothesis_part:
+			{AlPha, BeTa}
+		end_hypothesis_part
+		goal_part:
+			{Tam.x=AlPha,Tam.y=BeTa}
+		end_goal_part		
+	end_rule
+  XacDinh_pt_Parabol_ct(f)

@@ -1,0 +1,275 @@
+﻿begin_rules
+
+begin_rule 1
+	kind_rule="";
+	M : Diem; 	
+	E : Elip;
+	hypothesis_part
+		{["Thuoc",M,E]}
+	end_hypothesis_part
+	goal_part
+		{(M.x)^2/(E.a)^2+(M.y)^2/(E.b)^2=1, Doan[M,E.F1].length = (E.a) + (E.e) * (M.x), Doan[M,E.F2].length = (E.a) - (E.e)*(M.x)}
+	end_goal_part
+end_rule
+
+end_rules
+begin_rule 2
+   	kind_rule = "xac_dinh";
+	M,N:Diem;
+	E:Elip;
+	hypothesis_part:  
+		{M,N,["Thuoc",M,E],["Thuoc",N,E]}
+	end_hypothesis_part
+	goal_part: 
+		{E.f1}
+	end_goal_part
+	proc:E.f1=Elip_pt2diem[M,N];
+end_rule
+
+begin_rule 3
+    	kind_rule = "";
+	A,B:Diem
+	d:DuongThang
+    	hypothesis_part:  
+		{d=TrungTruc(A,B)}
+   	end_hypothesis_part
+    	goal_part: 
+		{["Thuoc",A,d],["Thuoc",B,d]}
+    	end_goal_part
+end_rule
+
+
+#Them rule phan Elip
+
+
+ begin_rule _1
+    	kind_rule = "thanh_lap_phuong_trinh";
+    	M:Diem;
+    	dt:DuongThang;
+    	hypothesis_part:  
+        		{["Thuoc",M,dt]}
+    	end_hypothesis_part
+    	goal_part: 
+        		{}
+    	end_goal_part
+        	proc: tlpt[M,dt]
+end_rule
+
+begin_rule _2
+    	kind_rule = "thanh_lap_phuong_trinh";
+    	M:Diem;
+    	dt:Doan;
+    	hypothesis_part:  
+        		{["Thuoc",M,dt]}
+    	end_hypothesis_part
+    	goal_part: 
+       		{}
+    	end_goal_part
+        	proc: tlpt[M,dt]
+end_rule
+
+begin_rule _3
+    	kind_rule = "thanh_lap_phuong_trinh";
+    	dt1,dt2:DuongThang;
+    	hypothesis_part:  
+        		{["SongSong",dt1,dt2]}
+    	end_hypothesis_part
+    	goal_part: 
+       		{}
+    	end_goal_part
+        	proc: tlptdssd[dt1,dt2]
+end_rule
+
+begin_rule _4
+    	kind_rule = "thanh_lap_phuong_trinh";
+    	dt1,dt2:Doan;
+    	hypothesis_part:  
+        		{["SongSong",dt1,dt2]}
+    	end_hypothesis_part
+    	goal_part: 
+        		{}
+    	end_goal_part
+        	proc: tlptdssd[dt1,dt2]
+end_rule
+
+begin_rule _4_2
+    	kind_rule = "thanh_lap_phuong_trinh";
+    	dt1:DuongThang
+	dt2:Doan;
+    	hypothesis_part:  
+        		{["SongSong",dt1,dt2]}
+    	end_hypothesis_part
+    	goal_part: 
+        		{}
+    	end_goal_part
+        	proc: tlptdssd[dt1,dt2]
+end_rule
+   
+ begin_rule _5
+    	kind_rule = "thanh_lap_phuong_trinh";
+    	dt1,dt2:DuongThang;
+    	hypothesis_part:  
+        		{["Vuong",dt1,dt2]}
+    	end_hypothesis_part
+    	goal_part: 
+        		{}
+    	end_goal_part
+        	proc: tlptdvgd[dt1,dt2]
+end_rule
+
+begin_rule _6
+    	kind_rule = "thanh_lap_phuong_trinh";
+    	dt1,dt2:Doan;
+    	hypothesis_part:  
+      		{["Vuong",dt1,dt2]}
+    	end_hypothesis_part
+    	goal_part: 
+        		{}
+    	end_goal_part
+        	proc: tlptdvgd[dt1,dt2]
+end_rule
+begin_rule _6_2
+    	kind_rule = "thanh_lap_phuong_trinh";
+    	dt1:DuongThang;
+	dt2:Doan;
+    	hypothesis_part:  
+      		{["Vuong",dt1,dt2]}
+    	end_hypothesis_part
+    	goal_part: 
+        		{}
+    	end_goal_part
+        	proc: tlptdvgd[dt1,dt2]
+end_rule
+
+
+
+begin_rule 32
+    	kind_rule = "";
+	A:Diem
+	d,d1:DuongThang
+    	hypothesis_part:  
+		{ ["Thuoc",A, d], Goc(d,d1)}
+   	end_hypothesis_part
+    	goal_part: 
+		{d}
+    	end_goal_part
+	proc: proc: tlpttq_Goc[M,Goc(d,d1)]
+end_rule
+
+ begin_rule 16
+    	kind_rule = "xac_dinh";
+    	M,S,T:Diem;
+    	dt:DuongThang;
+     	hypothesis_part:  
+        		{M,Vecto(S,T),["Thuoc",M,dt],["SongSong",Vecto(S,T),dt]}
+    	end_hypothesis_part
+    	goal_part: 
+      		{dt}
+    	end_goal_part
+    	proc:dt.f=ptdtss[M,Vecto(S,T)];
+    	proc:dt.f2= tlpttsss[M,Vecto(S,T)];
+end_rule
+
+begin_rule 2
+    	kind_rule = "quan_he,`=`";
+    	va,vb:Vecto;
+    	hypothesis_part:  
+    		{(va.x)=(vb.x),(va.y)=(vb.y)}
+    	end_hypothesis_part
+    	goal_part:      
+      		{["=",va,vb]}
+    	end_goal_part
+end_rule
+begin_rule 4
+    	kind_rule = "quan_he";
+    	va,vb:Vecto;
+    	hypothesis_part:  
+       		{(va.x)*(vb.y)-(va.y)*(vb.x)=0}
+    	end_hypothesis_part
+    	goal_part:          
+       		{["CungPhuong",va,vb]}
+    	end_goal_part
+end_rule
+begin_rule 30
+    	kind_rule = "";
+	A,B,C,M,N:Diem
+    	hypothesis_part:  
+		{["TrungBinh",Doan[M,N],TamGiac[A,B,C]]}
+    	end_hypothesis_part
+    	goal_part: 
+		{["SongSong",Doan[M,N],Doan[A,B]], Doan[M,N].length = 1/2 * Doan[A,B].length}
+    	end_goal_part
+end_rule
+begin_rule 20
+    	kind_rule = "xac_dinh";
+    	A,B,C,M,N:Diem
+    	hypothesis_part:  
+        		{M=TrungDiem(B,C),N=TrungDiem(A,C)}
+    	end_hypothesis_part
+    	goal_part: 
+      		{["TrungBinh",Doan[M,N],TamGiac[A,B,C]], ["SongSong",Doan[M,N],Doan[A,B]], Doan[M,N].length = 1/2 * Doan[A,B].length}
+  	end_goal_part
+end_rule
+
+
+begin_rule 30
+    kind_rule = "";
+	A,B,C,M,N:Diem
+    hypothesis_part:  
+	{["TrungBinh",Doan[M,N],TamGiac[A,B,C]]}
+    end_hypothesis_part
+    goal_part: 
+	{["SongSong",Doan[M,N],Doan[A,B]], Doan[M,N].length = 1/2 * Doan[A,B].length}
+    end_goal_part
+  end_rule
+
+
+begin_rule 28
+    kind_rule = "xac_dinh";
+   K,A,B,C,D:Diem;
+O1:HinhBinhHanh
+    hypothesis_part:  
+      {[O1,"HinhBinhHanh[A,B,C,D]"],["Tam",K,O1]}
+    end_hypothesis_part
+    goal_part: 
+     {["TrungDiem",K,Doan[A,C]], ["TrungDiem",K,Doan[B,D]]}
+    end_goal_part
+	 
+  end_rule
+  begin_rule 36
+    kind_rule = "quan_he_tinh_toan";
+	dA,dB,dC,dG : Diem
+	O: TamGiac
+    hypothesis_part:  
+      {[O,"TamGiac[dA,dB,dC]"], ["TrongTam",dG,O]}
+    end_hypothesis_part
+    goal_part:      
+      {dG=TrongTam(dA,dB,dC)}
+    end_goal_part
+  end_rule
+
+
+  begin_rule 36
+    kind_rule = "quan_he_tinh_toan";
+	dA,dB,dC,dH : Diem
+	O: TamGiac
+    hypothesis_part:  
+      {[O,"TamGiac[dA,dB,dC]"], ["TrucTam",dH,O]}
+    end_hypothesis_part
+    goal_part:      
+      {["Vuong",Vecto(dA,dC),Vecto(dB,dH)], ["Vuong",Vecto(dB,dC),Vecto(dA,dH)]}
+    end_goal_part
+  end_rule
+  begin_rule 35
+    kind_rule = "quan_he_tinh_toan";
+    A,B,C:Diem
+    hypothesis_part:  
+      {["CungPhuong",Vecto(A,B),Vecto(B,C)]}
+    end_hypothesis_part
+    goal_part:      
+      {["ThangHang",A,B,C]}
+    end_goal_part
+  end_rule
+
+
+

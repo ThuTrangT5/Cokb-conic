@@ -1,0 +1,35 @@
+﻿#-----------------
+Thu Trang Elip bai 15b
+#------------------
+Viết phương trình chính tắc của elip trong các trường hợp sau
+b.	Trục lớn = 10 và tâm sai e = 4/5
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+    end_objects
+
+	facts:
+		E.TrucLon = 10, E.e = 4/5
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	E.f1
+  end_goals
+
+end_exercise

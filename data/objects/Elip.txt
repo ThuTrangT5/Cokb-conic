@@ -1,0 +1,207 @@
+﻿f1: PT_CT		// pt chính tắc
+f2: PT_TS		// pt tham số
+x,y:DuongThang	// pt hình chữ nhật cơ sở
+d1,d2:DuongThang	// đường chuẩn
+Tam:Diem		// tâm Ellipse
+
+
+begin_object: Elip;	
+begin_variables
+	A1,A2,B1,B2,F1,F2:Diem
+	TieuCu, TrucLon, TrucNho, TamSai: Real
+	AlPha, BeTa: Real
+	a,b,c,e: Real
+	f,f1,f2: PhuongTrinh
+	x1,x2,y1,y2:DuongThang
+	d1,d2:DuongThang
+end_variables
+
+begin_constraints
+	a>0;	
+	b>0;
+	c>0;
+	e>0;	
+end_constraints
+
+begin_construct_relations	
+end_construct_relations
+
+begin_properties
+end_properties
+
+begin_contruction_properties
+end_contruction_properties
+
+begin_computation_relations	
+ 	begin_relation  1
+ 		flag = 1
+		Mf    ={TieuCu, c}
+		rf    =1
+		vf   = {}
+		expf ="TieuCu=2*c"
+		cost=1
+	end_relation
+	begin_relation  2
+ 		flag = 1
+		Mf    ={TrucLon, a}
+		rf    =1
+		vf   = {}
+		expf ="TrucLon=2*a"
+		cost=1
+	end_relation
+	begin_relation  3
+ 		flag = 1
+		Mf    ={TrucNho, b}
+		rf    =1
+		vf   = {}
+		expf ="TrucNho=2*b"
+		cost=1
+	   end_relation 
+	begin_relation  4
+ 		flag = 1
+		Mf    ={a,b,c}
+		rf    =1
+		vf   = {}
+		expf ="a=sqrt(b^2+c^2)"
+		cost=4
+	   end_relation
+ 	begin_relation  5
+ 		flag = 1
+		Mf    ={e, c,a}
+		rf    =1
+		vf   = {}
+		expf ="e=c/a"
+		cost=4
+	end_relation
+end_computation_relations
+
+begin_rules
+
+	begin_rule 1
+  		kind_rule = "";
+		f:PhuongTrinh
+		hypothesis_part:
+			{f}
+		end_hypothesis_part
+		goal_part:
+			{f1}
+		end_goal_part
+		proc: f1=Elip_ptct(f)
+	end_rule
+
+	begin_rule 2
+  		kind_rule = "xac_dinh_doi_tuong";
+		hypothesis_part:
+			{f1}
+		end_hypothesis_part
+		goal_part:
+			{"Object"}
+		end_goal_part	
+	end_rule	
+
+	begin_rule 3
+  		kind_rule = "xac_dinh_doi_tuong";
+		a,b:Real;
+		Tam:Diem;
+		hypothesis_part:
+			{a,b}
+		end_hypothesis_part
+		goal_part:
+			{"Object"}
+		end_goal_part		
+	end_rule
+	
+	begin_rule 4
+  		kind_rule = "";
+		a,b:Real;
+		hypothesis_part:
+			{a,b}
+		end_hypothesis_part
+		goal_part:
+			{f1= (x^2/a^2 + y^2/b^2 = 1)}
+		end_goal_part
+	end_rule
+	
+	begin_rule 5
+  		kind_rule = "";
+		f1:PhuongTrinh
+		hypothesis_part:
+			{f1}
+		end_hypothesis_part
+		goal_part:
+			{a,b}
+		end_goal_part
+		proc: a=Elip_a(f1);
+		proc: b=Elip_b(f1);
+	end_rule
+	
+	begin_rule 6
+  		kind_rule = "";
+		hypothesis_part:
+			{a,b}
+		end_hypothesis_part
+		goal_part:
+			{c,e}
+		end_goal_part
+		proc: c=Elip_c(a,b);
+		proc: e=Elip_tam_sai(a,b);
+	end_rule
+
+	begin_rule 7
+  		kind_rule = "";
+		hypothesis_part:
+			{a}
+		end_hypothesis_part
+		goal_part:
+			{A1=[-a,0], A2=[a,0]}
+		end_goal_part		
+	end_rule
+
+	begin_rule 8
+  		kind_rule = "";
+		hypothesis_part:
+			{b}
+		end_hypothesis_part
+		goal_part:
+			{B1=[0,-b], B2=[0,b]}
+		end_goal_part		
+	end_rule
+
+	begin_rule 9
+  		kind_rule = "";
+		hypothesis_part:
+			{c}
+		end_hypothesis_part
+		goal_part:
+			{F1=[-c,0], F2=[c,0]}
+		end_goal_part		
+	end_rule	
+	
+	begin_rule 10
+  		kind_rule = "";
+		hypothesis_part:
+			{F1}
+		end_hypothesis_part
+		goal_part:
+			{c=-F1.x}
+		end_goal_part		
+	end_rule
+	
+	begin_rule 11
+  		kind_rule = "";
+		hypothesis_part:
+			{F2}
+		end_hypothesis_part
+		goal_part:
+			{c=F2.x}
+		end_goal_part		
+	end_rule
+end_rules
+
+
+begin_functions    	
+end_functions
+
+end_object
+
+// Het cau truc cua mot doi tuong Elip		

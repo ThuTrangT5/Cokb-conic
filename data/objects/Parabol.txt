@@ -1,0 +1,99 @@
+, b0=[op(Reverse([coeffs(rhs(f1))])),0][2]/[op(Reverse([coeffs(rhs(f1))])),0][1], p = abs(coeff(rhs(f),indets(rhs(f))[1],1)/2)
+f,ptct: PhuongTrinh // ptct dạng (a + a0)^2=2*p*(b + b0) => with(ListTools);
+F:Diem// tiêu điểm (F=(+-p/2,0))
+d:DuongThang// đường chuẩn
+ThamSoTieu: real// tham số tiêu = khoảng chác từ F đến d
+S: Diem // đỉnh của parabol
+a0,b0,
+
+begin_object: Parabol;	
+begin_variables
+	S,F: Diem
+	p,ThamSoTieu: Real
+	f,ptct: PhuongTrinh
+	d: DuongThang
+end_variables
+
+begin_constraints
+	p>0;
+end_constraints
+
+begin_construct_relations	
+end_construct_relations
+
+begin_properties
+end_properties
+
+begin_contruction_properties
+end_contruction_properties
+
+begin_computation_relations	
+ 	begin_relation  1
+ 		flag = 1
+		Mf    ={ThamSoTieu, p}
+		rf    =1
+		vf   = {}
+		expf ="ThamSoTieu=2*p"
+		cost=1
+	end_relation
+	   
+end_computation_relations
+
+begin_rules
+
+	begin_rule 1
+  		kind_rule = "xac_dinh_doi_tuong";
+		ptct:PhuongTrinh
+		hypothesis_part:
+			{ptct}
+		end_hypothesis_part
+		goal_part:
+			{"Object"}
+		end_goal_part
+	end_rule	
+		
+	begin_rule 2
+  		kind_rule = "";
+		f:PhuongTrinh
+		hypothesis_part:
+			{f}
+		end_hypothesis_part
+		goal_part:
+			{ptct}
+		end_goal_part
+		proc:ptct=Parabol_ptct(f);
+	end_rule
+		
+	begin_rule 3
+  		kind_rule = "";
+		ptct: PhuongTrinh
+		hypothesis_part:
+			{ptct}
+		end_hypothesis_part
+		goal_part:
+			{F,S,p,d}
+		end_goal_part
+		proc: F=Parabol_TieuDiem(ptct);
+		proc: S=Parabol_Dinh(ptct);
+		proc: p=Parabol_p(ptct);
+		proc: d=Parabol_DuongChuan(ptct);
+	end_rule	
+end_rules
+
+begin_functions
+end_functions
+
+end_object
+
+
+	begin_rule 3
+  		kind_rule = "";
+		ptct:PhuongTrinh
+		hypothesis_part:
+			{ptct}
+		end_hypothesis_part
+		goal_part:
+			{a0= tcoeff(factors(lhs(ptct))[2][1][1])}
+		end_goal_part
+	end_rule	
+// Het cau truc cua mot doi tuong Parabol

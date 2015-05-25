@@ -1,0 +1,19 @@
+﻿begin_Relations
+
+	#Điểm và Elip
+	[Tam,Diem,Elip],{}
+	
+	[Thuoc,Diem, Elip],{}
+	[Ngoai,Diem, Elip],{}
+	[Trong,Diem, Elip],{}
+
+	#Đường thẳng và Elip
+	[Cat,DuongThang, Elip],{"doi_xung"}
+	[TiepXuc,DuongThang, Elip],{"doi_xung"}
+	[KhongCat,DuongThang, Elip],{"doi_xung"}
+
+	#Elip và Elip
+	[GiaoNhau,Elip, Elip],{"doi_xung"}
+	[KhongGiaoNhau,Elip, Elip],{"doi_xung"}
+
+end_Relations

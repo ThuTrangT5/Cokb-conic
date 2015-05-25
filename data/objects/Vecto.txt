@@ -1,0 +1,37 @@
+begin_object: Vecto[x,y];
+	x: Real
+	y:Real	
+begin_variables
+	x: Real
+	y:Real
+	length: Real
+end_variables
+
+begin_constraints
+	length>=0
+end_constraints
+
+begin_computation_relations
+
+end_computation_relations
+
+  begin_construct_relations
+        length = sqrt(x^2+y^2);
+  end_construct_relations
+begin_rules
+
+	begin_rule 9
+  		kind_rule = "xac_dinh_doi_tuong";
+		hypothesis_part:
+			{x,y}
+		end_hypothesis_part
+		goal_part:
+			{"Object"}
+		end_goal_part
+		proc: "Object"=xd_Diem[x,y];
+	end_rule
+
+
+end_rules
+
+end_object

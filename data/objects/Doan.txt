@@ -1,0 +1,43 @@
+begin_object: Doan[A,B];
+  A,B: Diem;	
+ 
+  begin_variables
+    length: Real;  
+    
+  end_variables
+
+  begin_constraints
+        length > 0;
+  end_constraints
+
+  begin_construct_relations
+	        length = sqrt((B.x-A.x)^2+(B.y-A.y)^2);
+  end_construct_relations
+
+  begin_properties
+   	Doan[A,B] = Doan[B,A];
+  end_properties
+
+  begin_computation_relations
+  end_computation_relations
+
+  begin_rules
+
+  begin_rule 1
+     kind_rule = "xac_dinh_doi_tuong";
+         length:Real
+     hypothesis_part:
+       {length}
+     end_hypothesis_part
+     goal_part:
+       {"Object"}
+     end_goal_part
+  end_rule
+  
+  end_rules
+
+  begin_functions
+  end_functions
+
+end_object
+

@@ -1,0 +1,41 @@
+﻿#-----------	
+	2/241[7]
+#-----------
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	
+    end_objects
+
+  facts: 	
+	E.f= ( 16*x^2+9*y^2-144=0  );
+
+	
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals	
+	E.B2, E.F1
+  end_goals
+
+end_exercise
+
+
+
+	
+
+	

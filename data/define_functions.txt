@@ -1,0 +1,180 @@
+﻿begin_functions
+	begin_function: Elip_ptct(pt)
+		pt: PhuongTrinh
+		return ptct:PhuongTrinh
+		
+		begin_proc
+			local f1,a,b,st,a2,a1,b2,b1,fx,fy,x0,y0,msc;
+			f1 :=  lhs(pt)-rhs(pt); (* pt quy ve dang chi co ve trai*)
+			a2 := coeff(f1,x,2);
+			b2 := coeff(f1,y,2); 
+			a1 := coeff(f1,x,1);
+			b1 := coeff(f1,y,1);
+
+			if(a1=0 and b1=0) then
+			  st := -(f1 - a2*x^2 - b2*y^2);
+			  if(st <> 1) then
+				f1 := f1/st;
+			  end if;
+
+			  a := sqrt(1/coeff(f1,x,2));
+			  b := sqrt(1/coeff(f1,y,2));
+			  return (x^2/a^2 + y^2/b^2 = 1);
+
+			else 
+			  x0 := -a1/a2/2;
+			  y0 := -b1/b2/2;
+			  fx := (x - x0 )^2;
+			  fy := (y - y0)^2;
+
+			  msc := -simplify(f1 - (a2*fx + b2*fy));
+			  f1 := a2*fx/msc + b2*fy/msc = 1;
+			  return f1;
+			end if;
+		end_proc
+
+	end_function
+	
+	begin_function: Elip_a(ptct)
+		ptct: PhuongTrinh
+		return a:Real
+		begin_proc
+			local a;
+			a := coeff(lhs(ptct),x,2);
+			a := 1/a;
+			return sqrt(a);
+		end_proc
+	end_function
+	
+	begin_function: Elip_b(ptct)
+		ptct: PhuongTrinh
+		return b:Real
+		begin_proc
+			local b;
+			b := coeff(lhs(ptct),y,2);
+			b := 1/b;
+			return sqrt(b);
+		end_proc
+	end_function
+	
+	begin_function: Elip_c(a,b)
+		a,b:Real
+		return c:Real	
+		begin_proc
+			local c;
+			if (convert(a-b,float)>0) then
+			  c := sqrt(a^2 - b^2);
+			else
+			  c := sqrt(b^2 - a^2);
+			fi;
+			return c;
+		end_proc
+	end_function
+	
+	begin_function:Elip_tam(ptct)
+		ptct: PhuongTrinh
+		return I:Diem
+		begin_proc
+			ellipse(e1, ptct);
+			return coordinates(center(e1));
+		end_proc
+	end_function
+	
+	begin_function: Elip_tam_sai(a,b)
+		a,b:Real
+		return e:Real
+		begin_proc
+			local c,e;
+			  if (convert(a-b,float)>0) then
+			    c := sqrt(a^2 - b^2);
+				e := c/a;
+			  else 
+				c := sqrt(b^2 - a^2);				
+				e := c/b;
+			  fi;
+			return e;
+		end_proc
+	end_function
+	
+	begin_function: Elip_pt2diem(M,N)
+		M,N:Diem
+		return f:PhuongTrinh
+		begin_proc
+			local f,fM,fN,a,b,nghiem;
+			f := x^2/a^2 + y^2/b^2 = 1;
+
+			fM:= subs({x = M[1],y = M[2]},f);
+			fN:= subs({x = N[1],y = N[2]},f);
+			nghiem := solve({fM,fN,a>0,b>0},{a,b});
+			f:= subs({a=rhs(nghiem[1]),b=rhs(nghiem[2])},f);
+			return f;
+		end_proc
+	end_function
+
+	begin_function: DuongThang_a(f)
+		f:PhuongTrinh
+		return a:Real
+		begin_proc
+			local f1,a;
+			f1 := lhs(f);
+			a := coeff(f1,x,1);
+			return a;
+		end_proc
+	end_function
+
+	begin_function: DuongThang_b(f)
+		f:PhuongTrinh
+		return a:Real
+		begin_proc
+			local f1,b;
+			f1 := lhs(f);
+			b := coeff(f1,y,1);
+			return b;
+		end_proc
+	end_function
+
+	begin_function: DuongThang_c(f)
+		f:PhuongTrinh
+		return a:Real
+		begin_proc
+			local f1, a, b, c;
+			f1 := lhs(f);
+			a := coeff(f1,x,1);
+			b := coeff(f1,y,1);
+			c := f1 - a*x - b*y;
+			return c;
+		end_proc
+	end_function
+
+	begin_function: KhoangCach(A,B)
+		A,B: Diem
+		return kc:Real
+		begin_proc
+			local kc;
+			kc := sqrt((B[1]-A[1])^2+(B[2]-A[2])^2);
+			return kc;
+		end_proc
+	end_function
+
+	begin_function: DuongThang_pt2d(M,N)
+		M,N:Diem
+		return f:PhuongTrinh
+		begin_proc
+			local f,fM,fN,vtcp,vtpt,fVT,kq,ucln;
+	
+			f := a*x + b*y + c = 0;
+			fM := subs({x=M[1],y=M[2]},f);
+			fN := subs({x=N[1],y=N[2]},f);
+			vtcp := [M[1]-N[1],M[2]-N[2]]; #vecto chỉ phương(a,b)
+			ucln := gcd(vtcp[1],vtcp[2]);#tìm ước chung lớn nhất
+			vtcp := [vtcp[1]/ucln,vtcp[2]/ucln]; #tối giản vtcp
+			vtpt := [-vtcp[2],vtcp[1]]; #vecto pháp tuyến(-b,a)
+			fVT := {a=vtpt[1], b=vtpt[2]};
+	
+			kq := solve({fM,fN,op(fVT)},{a,b,c});
+	
+			return subs(kq,f);
+		end_proc
+	end_function
+
+end_functions

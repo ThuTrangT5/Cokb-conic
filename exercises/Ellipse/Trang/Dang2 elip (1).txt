@@ -1,0 +1,45 @@
+﻿#-----------------
+Thu Trang Elip
+#------------------
+
+Lập phương trình Elip (E) :
+1.	độ dài các trục lớn và độ dài các trục nhỏ là 8 và 6.
+2.	độ dài các trục lớn là 10  và tiệu cự bằng 6.
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip	
+    end_objects
+
+	facts:
+		E.TrucLon = 8;
+		E.TrucNho = 6;
+		E.Tam =[0,0]
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	E.f1;	
+  end_goals
+
+end_exercise
+
+E.A1, E.A2, E.B1, E.B2, E.F1,E.F2, E.TieuCu,E.e,E.d1.E.d2	
+
+	
+
+	

@@ -1,0 +1,27 @@
+begin_object: Diem[x,y];
+	x: Real
+	y: Real	
+begin_variables
+	x: Real
+	y: Real
+end_variables
+
+begin_constraints
+end_constraints
+
+begin_computation_relations
+end_computation_relations
+
+begin_rules
+	begin_rule 
+  		kind_rule = "xac_dinh_doi_tuong";
+		hypothesis_part:
+			{x,y}
+		end_hypothesis_part
+		goal_part:
+			{"Object"}
+		end_goal_part
+		proc: "Object"=[x,y];
+	end_rule
+end_rules
+end_object

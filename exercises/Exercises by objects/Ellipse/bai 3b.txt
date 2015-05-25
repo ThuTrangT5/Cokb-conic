@@ -1,0 +1,42 @@
+﻿#-----------------
+Thu Trang Elip bai 3b
+#------------------
+Cho elip (E): x^2/9 + y^2 = 1. Tìm những điểm M trên Elip sao cho
+b. MF1 = 2MF2
+
+Sách 4/ 141
+
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	M: Diem
+	a,b: Doan
+    end_objects
+
+	facts:
+		E.f1=(x^2/9 + y^2 = 1), ["Thuoc",M,E]
+		a.length = 2*(b.length)
+		Doan[M,E.F1]=a, Doan[M,E.F2] = b
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	M
+  end_goals
+
+end_exercise

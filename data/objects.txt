@@ -1,0 +1,7 @@
+begin_Objects
+	Diem
+	Doan
+	DuongThang
+	DuongTron
+	Elip
+end_Objects

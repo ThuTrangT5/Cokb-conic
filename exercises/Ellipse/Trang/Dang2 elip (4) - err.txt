@@ -1,0 +1,39 @@
+﻿#-----------------
+Thu Trang Elip
+#------------------
+
+Lập phương trình Elip (E) biết (E) đi qua M(1; sqrt(3)/2) và có tiêu điểm F2(sqrt(3),0)
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	M: Diem
+    end_objects
+
+	facts:
+		M=[1,sqrt(3)/2];
+		E.Tam=[0,0];
+		E.F2=[sqrt(3),0];
+		(E.a)^2 - (E.b)^2 = (E.c)^2;
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	E.f1;	
+  end_goals
+
+end_exercise

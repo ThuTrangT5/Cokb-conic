@@ -1,0 +1,38 @@
+﻿#-----------------
+Thu Trang Elip bai 15
+#------------------
+Viết phương trình chính tắc của elip trong các trường hợp sau
+a.	Tiêu điểm F2(√3,0) và đi qua M(1,√3/2)
+
+
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	M: Diem
+    end_objects
+
+	facts:
+		E.F2 = [sqrt(3),0], M = [1,sqrt(3)/2], ["Thuoc",M,E]
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	E.f1
+  end_goals
+
+end_exercise

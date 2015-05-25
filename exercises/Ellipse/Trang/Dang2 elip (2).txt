@@ -1,0 +1,37 @@
+﻿#-----------------
+Thu Trang Elip
+#------------------
+
+Lập phương trình Elip (E) biết độ dài các trục lớn là 10  và tiệu cự bằng 6.
+
+
+begin_exercise
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip	
+    end_objects
+
+	facts:
+		E.TrucLon = 10;
+		E.TieuCu = 6;
+		E.Tam =[0,0];
+		(E.a)^2 - (E.b)^2 = (E.c)^2;
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	E.f1;	
+  end_goals
+
+end_exercise

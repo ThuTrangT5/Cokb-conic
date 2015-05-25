@@ -1,0 +1,76 @@
+﻿begin_object: DuongThang; 
+begin_variables
+    	f: PhuongTrinh
+	f2: HePhuongTrinh
+	a,b,c: Real
+end_variables
+
+begin_constraints
+end_constraints
+
+begin_construct_relations
+end_construct_relations
+
+begin_properties    
+end_properties
+
+begin_computation_relations  
+end_computation_relations
+
+begin_rules
+
+begin_rule 1
+      	kind_rule = "xac_dinh_doi_tuong";
+      	f:PhuongTrinh
+      	hypothesis_part:  
+        		{f}
+      	end_hypothesis_part
+      	goal_part: 
+        		{"Object"}
+      	end_goal_part
+end_rule
+
+begin_rule 2
+      	kind_rule = "chuyen tu pt dang tham so sang tong quat";
+      	hypothesis_part:  
+        		{f2}
+      	end_hypothesis_part
+      	goal_part: 
+        		{f}
+     	end_goal_part
+	proc: f = ts_tq[f2];
+end_rule
+begin_rule 3
+      	kind_rule = "chuyen tu pt dang tong quat sang tham so";
+      	hypothesis_part:  
+        		{f}
+     	end_hypothesis_part
+      	goal_part: 
+        		{f2}
+      	end_goal_part
+	proc: f2 = tq_ts[f];
+end_rule
+begin_rule 4
+      	kind_rule = "";
+      	hypothesis_part:  
+        		{a,b,c}
+     	end_hypothesis_part
+      	goal_part: 
+        		{f= (a*x + b*y + c = 0)}
+      	end_goal_part
+end_rule
+begin_rule 5
+      	kind_rule = "";
+      	hypothesis_part:  
+        		{f}
+     	end_hypothesis_part
+      	goal_part: 
+        		{a,b,c}
+      	end_goal_part
+	proc: f2 = tq_ts[f];
+end_rule
+end_rules
+begin_functions
+end_functions
+end_object
+
