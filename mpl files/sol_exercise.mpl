@@ -519,13 +519,13 @@ end proc: # Deduce_From8s
 
 #Deduce_From53s :suy ra su kien moi loai 3, 4, 5 tu 1 su kien 5 va nhieu su kien 3 bang cach the cac su kien 3 vao su kien 5
 GeometryConicSolver[Deduce_From53s]:=proc()
-	local fact5,fact3,news, vars5,f, k,f3,numOfNewsVars, fact3vars,i;
+	local fact5,fact3,news, vars5,f, k,f3,numOfNewsVars, fact3vars,i, Obj_Attrs, Obj_Attr_Types;
 	global Fact_Kinds,FactSet,Sol,flag,DF53;
 	
 	f3:=[];
 	fact3vars := [seq(lhs(i), i in Fact_Kinds[3])];
-	Obj_Attrs := [op(Objects),op(OAttrs)];
-	Obj_Attr_Types := [op(Obj_Types), op(OAttr_Types)];
+	Obj_Attrs := [op(Objects),op(OAttrs)];#chứa các Objects và Attributes của bài toán
+	Obj_Attr_Types := [op(Obj_Types), op(OAttr_Types)];#chứa kiểu của các Objects và Attributes của bài toán
 
 	for fact5 in Fact_Kinds[5] do
 		if member(fact5,DF53) then next;fi;
@@ -584,13 +584,17 @@ GeometryConicSolver[Deduce_From45] := proc(fact5)
 	fact4s := Fact_Kinds[4];
 	fact4OK :={};
 	
+	#tìm những fact4 thõa fact5
 	for f in fact4s do
-		if member(lhs(f),vars) then
+		#if member(lhs(f),vars) then
+		if member(lhs(f),vars) and type_Onet(lhs(f))<>"Diem" then
+		#Trang sửa: không thay thế các đối tượng Điểm mà thay thế các giá trị thực của nó là x, y 
 			kq := subs(f,kq);
 			fact4OK := fact4OK union {f};
 		fi;
 	od;
-	# k tìm được sự kiện loại 4 thõa fact5 
+	
+	# không tìm được sự kiện loại 4 thõa fact5 
 	if (fact4OK ={})then return fi; 
 	
 	fact3s :={};

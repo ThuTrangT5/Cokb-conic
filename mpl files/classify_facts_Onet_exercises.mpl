@@ -88,7 +88,7 @@ GeometryConicSolver[ObjStruct_Replace]:=proc(d)
 	
 	objType := type_Onet(d);
 	OSTemp := ObjStruct(objType);
-	objProperties := OSTemp[6];
+	#objProperties := OSTemp[6];
 	
 	#Bước 1: thay thế tên đối tượng và các biến trong cấu trúc Objecy(OSTemp[3])
 	thaythe := seq(	OSTemp[3][1][i]=d.OSTemp[3][1][i],
@@ -113,7 +113,7 @@ GeometryConicSolver[ObjStruct_Replace]:=proc(d)
 	fi;
 	
 	#Bước 3: Kiểm tra lại sự thay thế của OSTemp[6] : các properties của đối tượng
-	
+	#??? Chưa làm
 
 	(*if type(d,indexed) then 
 		OSTemp:=subs(seq([op(parse(OSTemp[1]))][i]=[op(d)][i],i=1..nops([op(d)])),OSTemp);
