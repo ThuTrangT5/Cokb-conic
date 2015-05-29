@@ -14,4 +14,4 @@ Reset_Onet():
 #ReadExer(cat(ellipseUrl,"\\bai 15.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 15b.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 15c.txt"));
-ReadExer(cat(ellipseUrl,"\\bai 3b.txt"));
+#ReadExer(cat(ellipseUrl,"\\bai 3b.txt"));

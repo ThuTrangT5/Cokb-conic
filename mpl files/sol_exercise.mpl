@@ -544,7 +544,6 @@ GeometryConicSolver[Deduce_From53s]:=proc()
 				i :='i';
 				#Không xét những trường hợp là Điểm nhưng vẫn xét TH thay thế tọa độ x,y của Điểm
 				if member(lhs(fact3), Obj_Attrs,`i`) then
-					lprint("i2=",i);
 					if (Obj_Attr_Types[i] = "Diem") then next; fi;				
 				fi;
 				#i :='i';
