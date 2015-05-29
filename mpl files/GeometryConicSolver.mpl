@@ -214,3 +214,4 @@ DuongThang_pt2d := proc(M,N)
 
 	return subs(kq,f);
 end proc:
+

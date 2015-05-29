@@ -167,7 +167,7 @@ GeometryConicSolver[Set_Vars]:=proc(expr)
 		RETURN ({});
 		
 	#Trang bổ sung kiểu indexed dạng Doan[A,B] => vars = A,B
-	elif type(expr,`indexed`) then
+	(*elif type(expr,`indexed`) then
 		#Lấy tất cả tên các đối tượng lưu trong file Objects.txt
 		allObjs := {seq(Obj_Structs[i][1], i=1..nops(Obj_Structs))};
 		#lấy tên object 
@@ -184,9 +184,10 @@ GeometryConicSolver[Set_Vars]:=proc(expr)
 		else
 			return {expr};
 		fi;
-	#End Bổ sung	
-	#elif type(expr,`name`)or type(expr,`indexed`) or type(expr, function) then # Trang sửa chỗ này
-	elif type(expr,`name`) or type(expr, function) then
+	#End Bổ sung
+	*)
+	elif type(expr,`name`)or type(expr,`indexed`) or type(expr, function) then # Trang sửa chỗ này
+	#elif type(expr,`name`) or type(expr, function) then
 	
 		return {expr};
 	elif type(expr,`set`) or type(expr,list)then

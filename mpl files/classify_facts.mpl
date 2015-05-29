@@ -10,9 +10,16 @@
 #Hàm kiểm tra loại của một sự kiện
 #Hàm nhận vào một sự kiện và xuất ra số thứ tự của sự kiện đó (1-11)
 GeometryConicSolver[Kind_Fact]:=proc(fact)
-	global Objects, Obj_Types, OAttrs, OAttr_Types; 
-	local temp, i;
+	global Objects, Obj_Types, OAttrs, OAttr_Types, Fact_Kinds, Sol; 
+	local temp, i, rightIsElement, rightVars, rightHasElement, rightIsIdentifyElement, f4new;
 	
+	#Loại trường hợp fact có dạng A=A, A=true, true=A
+	if type(fact,`=`) then
+		if fact then return 0; fi; # A=A => loại
+		if type(lhs(fact),`=`) and lhs(fact) then return 0; fi; # A = true => loại
+		if type(rhs(fact),`=`) and rhs(fact) then return 0; fi; # true = A => loại
+	fi;
+
 	if type(fact, list) then
 		#Loai 1: Su kien thong tin ve loai doi tuong
 		if nops(fact)=2 and 
@@ -39,46 +46,66 @@ GeometryConicSolver[Kind_Fact]:=proc(fact)
 		fi;	
 	#Loai 2: Su kien ve tinh xac dinh cua 1 dt/tt
 	elif Is_Element(fact) then 
-		return 2; 
-		
+		return 2;
 	
 	elif type(fact,`=`) and Is_Element(lhs(fact)) then 
+
 		#Loai 4:Sự kiện về sự bằng nhau giữa một đối tượng hay một thuộc tính với một đối tượng hay một thuộc tính khác
 		#if Is_Element(rhs(fact)) or (type(rhs(fact),list) and Has_Element( Set_Vars(rhs(fact)) )) then return 4;
-		#Trang sửa dòng này
 		
-		#lprint("===> type indexed : ", type(rhs(fact),`indexed`));
-		#lprint("===> has element : ",Has_Element( Set_Vars(rhs(fact))));
-		#lprint("has element of ",rhs(fact), " = ", Has_Element( Set_Vars(rhs(fact))));
-		#lprint("vars = ",Set_Vars(rhs(fact)));
+		#Trang sửa dòng trên thành 
+		rightIsElement := Is_Element(rhs(fact));
+		rightVars := Set_Vars(rhs(fact));
+		rightHasElement := Has_Element(rightVars);
 		
-		if Is_Element(rhs(fact)) 
-			or ( (type(rhs(fact),list)or type(rhs(fact),`indexed`)) 
-				and Has_Element( Set_Vars(rhs(fact)) )) then 
+		#Kiểm tra xem vế phải có phải là định nghĩa của Element k?
+		#Ví dụ : Doan[A,B] => là định nghĩa về đoạn => 
+		rightIsIdentifyElement := false;
+		if type(rhs(fact),`indexed`) then
+			temp := [seq(Obj_Structs[i][1],i=1..nops(Obj_Structs))];
+			if member(convert(op(0, rhs(fact)),string), temp) then
+				rightIsIdentifyElement := true;
+			fi;
+		fi;
+		
+		if rightIsElement or rightIsIdentifyElement or (type(rhs(fact),list) and rightHasElement) then
+			
+			#Kiểm tra nếu fact này có dạng Doan = Doan thì thêm vào Fact_Kind[3] fact Doan.length = Doan.length
+			if type_Onet(lhs(fact)) = "Doan" then
+				f4new:= lhs(fact).length = rhs(fact).length;
+				if not member(f4new, Fact_Kinds[4]) then
+					Fact_Kinds[4] := [op(Fact_Kinds[4]), f4new];
+					Sol :=[op(Sol), ["Deduce_FromObjectDoan",[],fact,{f4new}]]; 
+				fi;
+			fi;
 			return 4;
-		#End
+		#End Trang sửa
 
 		#Loai 9: <doi tuong> = <ham> 
 		elif Is_Function(rhs(fact)) then return 9;
 		
 		#Loai 3: Su kien ve su xac dinh cua 1dt/tt thong qua bieu thuc hang
-
-		elif not Has_Element(Set_Vars(rhs(fact))) then return 3;
+		#elif not Has_Element(Set_Vars(rhs(fact))) then return 3;
+		elif not rightHasElement then
+			return 3;
+		
 		#Loai 5: Su kien ve su phu thuoc cua 1dt/tt theo cac dt/tt khac thong qua 1 cong thuc tinh toan hoac la dang thuc theo cac dt/tt
 		else return 5;
 		fi;
 	
 	#Loai 5:
-	elif type(fact,`=`) and (Has_Element( Set_Vars(lhs(fact)) ) or Has_Element( Set_Vars(rhs(fact)) )) then return 5;
+	elif type(fact,`=`) and (Has_Element( Set_Vars(lhs(fact)) ) or Has_Element( Set_Vars(rhs(fact)) )) then
+		return 5;
 	
 	# Loai 7: Tinh xac dinh cua mot ham 
 	elif Is_Function(fact) then return 7;
 	
 	elif type(fact,`=`) and Is_Function(lhs(fact)) then
-		# Loai 10:Su kien ve su bang nhau cua 1ham voi 1ham khac:<ham>=<ham>.
+
+		# Loai 10: Su kien ve su bang nhau cua 1ham voi 1ham khac:<ham>=<ham>.
 		if Is_Function(rhs(fact)) then return 10; 
 	
-		# Loai 8: Tinh xac dinh cua mot ham thong qua bieu thuc hang:<ham>= <bieu thuc háº±ng>.
+		# Loai 8: Tinh xac dinh cua mot ham thong qua bieu thuc hang:<ham>= <biểu thức hằng>.
 		elif (Set_Vars(rhs(fact)))<>{} then 
 			if ((op(0,rhs(fact))=`+`) or (op(0,rhs(fact))=`*`)) and Has_Element(op(Set_Vars(rhs(fact)))) and not Is_Function(rhs(fact)) then
 				# Loai 11: Su phu thuoc cua 1 ham thong qua cac ham khac:<ham>=<bieu thuc ham/dt>

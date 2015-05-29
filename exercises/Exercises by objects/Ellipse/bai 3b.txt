@@ -26,7 +26,7 @@ begin_exercise
 	facts:
 		E.f1=(x^2/9 + y^2 = 1), ["Thuoc",M,E]
 		a.length = 2*(b.length)
-		Doan[M,E.F1]=a, Doan[M,E.F2] = b
+		a = Doan[M,E.F1], b = Doan[M,E.F2]
     end_facts
 	
     functions:
@@ -40,3 +40,4 @@ begin_exercise
   end_goals
 
 end_exercise
+

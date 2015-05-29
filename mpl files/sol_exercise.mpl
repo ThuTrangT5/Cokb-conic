@@ -532,7 +532,7 @@ GeometryConicSolver[Deduce_From53s]:=proc()
 		if(type(rhs(fact5),`=`)) then
 			news := rhs(fact5);
 		else
-			news:=lhs(fact5)-rhs(fact5)=0;
+			news := fact5;#news:=lhs(fact5)-rhs(fact5)=0;
 		fi;
 		vars5:= Set_Vars(fact5);		
 		
@@ -612,18 +612,23 @@ GeometryConicSolver[Deduce_From45] := proc(fact5)
 	# Kiểm tra tính xác định của đối tượng hay thuộc tính
 	kq := f;
 	f := {seq(op(1,lhs(fact3s[i])), i=1..nops(fact3s))};
+	if nops(f) = 0 then return; fi; #Trang thêm dòng này
+	
 	if (nops(f) = 1) then # kiểm tra đối tượng đã đc xác định chưa
 		vars := Set_Vars(fact3s);
 		fAtts := ObjStruct_Replace((f[1]));
 		
 		if (vars = {op(fAtts[2][1])} ) then
-			temp :=f[1] = subs(fact3s,fAtts[2][1]);
+			temp := f[1] = subs(fact3s,fAtts[2][1]);
+			print("temp = ", temp);
 			Sol :=[op(Sol), ["Deduce_From45",[],fact4OK union {fact5},{temp}]];
-		if not Unify_In1(temp,Fact_Kinds[3])then
-			Fact_Kinds[3] := [op(Fact_Kinds[3]), temp];
+			if not Unify_In1(temp,Fact_Kinds[3])then
+				Fact_Kinds[3] := [op(Fact_Kinds[3]), temp];
+			fi;
 		fi;
-	fi;
 	else # chỉ có thuộc tính của đối tượng được xác định
+	lprint("Deduce_From45");
+		if type(kq,`set`) then return; fi;#Trang them dong nay
 		Sol :=[op(Sol), ["Deduce_From45",[],fact4OK union {fact5},{kq}]]; 
 		if not Unify_In1(kq,Fact_Kinds[3])then
 			Fact_Kinds[3] := [op(Fact_Kinds[3]), kq];
@@ -637,7 +642,7 @@ GeometryConicSolver[Deduce_From45] := proc(fact5)
 end proc: #Deduce_From45
 
 #Deduce_From45s
-GeometryConicSolver[Deduce_From45s] := proc()
+GeometryConicSolver[Deduce_From45s_cu] := proc()
 	global Fact_Kinds,DF45;
 	local fact5,fact5s;
 
@@ -646,11 +651,83 @@ GeometryConicSolver[Deduce_From45s] := proc()
 		for fact5 in fact5s do
 			if not member(fact5, DF45) then
 				Deduce_From45(fact5);
-print("Loai 5 = ", Fact_Kinds[5]);				
 			fi;
 		od;
 	fi;
 end proc: #Deduce_From45s
+
+#Deduce_From45s => Trang viết lại hàm này
+GeometryConicSolver[Deduce_From45s] := proc()
+	global Fact_Kinds, DF45, Sol, FactSet, flag;
+	local fact45, equations, f5, vars, fact5others, result, newFact, f, k, newsFactOK, checkNew345;
+	
+	fact45 := {}; #fact sau khi đã thay thế fact4 vào fact5
+
+	for f5 in Fact_Kinds[5] do
+		if member(f5, DF45) then next; fi;
+		fact45 := f5;
+		vars := Set_Vars(fact45);
+		equations := {};# chứa hệ phương trình gồm các fact4 và fact5 kết hợp được với nhau
+		
+		#1. Tìm những fact4 có chứa các biến thuộc vars của fact5
+		for f in Fact_Kinds[4] do
+			if member(lhs(f), vars) and not member(type_Onet(lhs(f)),{"Diem","Doan"}) then
+				fact45 := subs(f,fact45);
+				equations := equations union {f};
+			fi;
+		od;
+		
+		if nops(equations) > 0 then
+			vars := Set_Vars(fact45);
+		fi;
+		equations := equations union {f5};
+		
+		#2. Kết hợp với các fact5 khác tạo thành phương trình			
+		fact5others := {op(Fact_Kinds[5])} minus {f5} minus DF45;
+		
+		for f in fact5others do
+			if member(lhs(f), vars) and not member(type_Onet(lhs(f)),{"Diem","Doan"}) then
+				fact45 := subs(f,fact45);
+				equations := equations union {f};
+			fi;
+		od;
+		
+		if nops(equations)<=1 then next; fi; #Không kết hợp thành hệ phương trình được
+		
+		vars := Set_Vars(fact45);
+		result := solve(fact45,vars);
+		
+		#Nếu phát sinh được sự kiện 
+		if nops([result]) > 1 then #chưa xét trường hợp giải hệ phương trình ra nhiều cặp nghiệm
+		else
+			newsFactOK := {};
+			checkNew345:= false; #kiểm tra có phát sinh fact mới loại 3,4,5 hay không
+			
+			for newFact in result do
+				k := Kind_Fact(newFact);#phân loại fact mới tìm được
+				if k>2 and k<=11 then
+					if member(newFact, Fact_Kinds[k]) then next; fi;
+					
+					newsFactOK := newsFactOK union {newFact};
+					Fact_Kinds[k] := [op(Fact_Kinds[k]), newFact];
+					
+					if k<=5 then checkNew345:= true; fi;
+				fi;
+			od;
+			
+			if nops(newsFactOK)>0 then
+				flag := true; #phát sinh được sự kiện mới
+				FactSet:= FactSet union newsFactOK;
+				Sol:=[op(Sol),["Deduce_From45s",[], equations , newsFactOK]];					
+				DF45:= DF45 union {f5};
+				
+				#Nếu phát sinh fact mới loại 3,4,5 thì sẽ ảnh hưởng đến quá trình thu thập phương trình => break Deduce_From45s
+				if checkNew345 = true then break; fi;
+			fi;
+		fi;
+	od;
+end proc: #Deduce_From45s
+
 
 #Deduce_From43s : sinh sk3s tu sk4s va sk3s bang cach the sk3s vao sk4s
 GeometryConicSolver[Deduce_From43s]:=proc()
@@ -1119,7 +1196,8 @@ lprint("Deduce_EqsGoal ***");
 					if Unify_In1(rerule[4][1], FactSet) then
 						if not member("Diem", rerule[3]) then
 							tam:= [rerule,op(tam)];
-						else tam:= [op(tam),rerule];
+						else 
+							tam:= [op(tam),rerule];
 						fi; 
 						
 						Vars := Vars union {op(cb)};
@@ -1127,7 +1205,8 @@ lprint("Deduce_EqsGoal ***");
 				fi; 
 			od; 
 		od;
-		RuleFunc := [op(RuleFunc),op(tam)];co := [op(co),seq("rule", i=1..nops(tam))]; 
+		RuleFunc := [op(RuleFunc),op(tam)];
+		co := [op(co),seq("rule", i=1..nops(tam))]; 
 	end : #find_rule
 
 	find_fact8 := proc()
@@ -1135,7 +1214,8 @@ lprint("Deduce_EqsGoal ***");
 
 		for fact8 in Fact_Kinds[8] do
 			if nops({op(lhs(fact8))})<> 1 and test_values([op(lhs(fact8))],Get_Values([op(lhs(fact8))])) then
-				RuleFunc := [op(RuleFunc),fact8]; co := [op(co),"fact8"];
+				RuleFunc := [op(RuleFunc),fact8]; 
+				co := [op(co),"fact8"];
 				Vars := Vars union {op(lhs(fact8))};
 			fi; 
 		od;
@@ -1146,7 +1226,8 @@ lprint("Deduce_EqsGoal ***");
 		for fact9 in Fact_Kinds[9] do
 			if Unify_In1(fact9, DF9) then next; fi;
 			if nops({op(rhs(fact9))})<> 1 and test_values([lhs(fact9),op(rhs(fact9))],Get_Values([lhs(fact9),op(rhs(fact9))])) then
-				RuleFunc := [op(RuleFunc),fact9];co := [op(co),"fact9"]; 
+				RuleFunc := [op(RuleFunc),fact9];
+				co := [op(co),"fact9"]; 
 				Vars := Vars union {lhs(fact9),op(rhs(fact9))};
 			fi;
 		od; 
@@ -1157,7 +1238,8 @@ lprint("Deduce_EqsGoal ***");
 				
 		for fact10 in Fact_Kinds[10] do
 			if nops({op(rhs(fact10))})<> 1 and nops({op(lhs(fact10))})<> 1 and test_values([op(lhs(fact10)),op(rhs(fact10))],Get_Values([op(lhs(fact10)),op(rhs(fact10))])) then
-				RuleFunc := [op(RuleFunc),fact10];co := [op(co),"fact10"]; 
+				RuleFunc := [op(RuleFunc),fact10];
+				co := [op(co),"fact10"]; 
 				Vars := Vars union {op(lhs(fact10)),op(rhs(fact10))}; 
 			fi;
 		od; 
@@ -1171,7 +1253,8 @@ lprint("Deduce_EqsGoal ***");
 			setVars:=set_vars(fact11);
 			if nops({op(rhs(fact11))})<> 1
 				and nops({op(lhs(fact11))})<> 1 and test_values([op(setVars)],Get_Values([op(setVars)])) then
-				RuleFunc := [op(RuleFunc),fact11];co := [op(co),"fact11"];
+				RuleFunc := [op(RuleFunc),fact11];
+				co := [op(co),"fact11"];
 				Vars := Vars union setVars; 
 			fi;
 		od;
@@ -1182,7 +1265,9 @@ lprint("Deduce_EqsGoal ***");
 
 		for fact3 in Fact_Kinds[3] do
 			if member(lhs(fact3),OAttrs) then 
+				#lấy thuộc tính contruct_relation của obj chứa attr đó
 				construct := ObjStruct_Replace(op(lhs(fact3))[1])[5];
+				
 				if construct <> [] then
 					for c in construct do
 						if Unify_Fact(lhs(c),lhs(fact3)) then
@@ -1210,7 +1295,7 @@ lprint("Deduce_EqsGoal ***");
 			fi;
 		od; 
 	end : # find_fact3_object 
-
+	
 	rule_func := proc(giatri)
 		local funcname, giatritemp,eq1,eq2,Eqs,Eq,rf,vt,vp,eq,j,ex,exgt,thaythe,ngt,
 		test_solve,GetVars_Poly,get_values,solve_eqs, init_values,get_value,find_eqs, test_vars, computationFunc;
@@ -1549,15 +1634,11 @@ lprint("Deduce_EqsGoal ***");
 	
 	# tim luat, ham sinh phuong trinh
 	find_rule();
-lprint("1:"); print("RuleFunc:",RuleFunc);print("co:",co); print("Vars: ",Vars);
-	find_fact8();
-lprint("2:"); print("RuleFunc:",RuleFunc);print("co:",co); print("Vars: ",Vars);	
-	find_fact9();
-lprint("3:"); print("RuleFunc:",RuleFunc);print("co:",co); print("Vars: ",Vars);	
+	find_fact8();	
+	find_fact9();	
 	find_fact10();	
 	find_fact11();
 	find_fact3_object();
-lprint("4init_values:"); print("RuleFunc:",RuleFunc);print("co:",co); print("Vars: ",Vars);	
 	
 	# thu giai phuong trinh (voi truong hop co nhieu nghiem)
 	Vars := [op(Vars)];
