@@ -260,14 +260,13 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 		local rule,news,ex,k,trihp,hamphu, phu, objRules, checkMember;
 		global temp;
 		if isPrint= true then print("7.8--Deduce_ObjRules");
-		fi;
-		
+		fi;		
 		
 		# hamphu: tính giá trị các goals theo các procs của object rules
 		hamphu:=proc()
 			local h,tt,doi,j,s, i, return_;
 			global DF3;
-			 
+
 			return_:={};
 			# rule[5] là thành phần proc của object's rule
 			for i in rule[5] do
@@ -275,17 +274,26 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 					tt:=op(0,i);
 					doi:=op(i);
 					phu:= parse(convert(tt(op(doi)),string));
-				else
+				else		
 					tt:=op(0,rhs(i));
 					doi:=[op(rhs(i))];
 					
 					for j to nops(doi) do
 						s:= Unify_In1(doi[j],[op(Fact_Kinds[2]),op(Fact_Kinds[7])]);
-						if(s <>-1)then doi[j]:=op(Get_Values([doi[j]]));fi;
+						if(s <> -1)then 
+							#doi[j]:= op(Get_Values([doi[j]])); #Trang bỏ dòng này thay bằng dòng dưới
+							valueDoij := Get_Values([doi[j]]);
+							if nops(valueDoij)>1 then 
+								doi[j] := op(valueDoij,1);
+							else 
+								doi[j]:= op(Get_Values([doi[j]]));
+							fi;
+						fi;
 					od;
+					
 					h:= parse(cat(convert(lhs(i),string), "=(",convert(tt(op(doi)),string),")"));
 					k:= Kind_Fact(h);
-					if k=3 and not Unify_In1(h,FactSet)then 
+					if k=3 and not Unify_In1(h,FactSet)then					
 						Fact_Kinds[k] :=[op(Fact_Kinds[k]),h];
 						if not Unify_In1(lhs(h),FactSet) then 
 							Fact_Kinds[2]:=[op(Fact_Kinds[2]),lhs(h)];
@@ -309,9 +317,6 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 				
 		#flag := false; #Them moi => dang check
 		objRules := OrderRulesByGoals(ObjStructTemp[8]); # Trang them moi
-		
-		#lprint("===> objRules ORDER :");
-		#print(objRules);
 				
 		#for rule in ObjStructTemp[8] do
 		for rule in objRules do
@@ -359,7 +364,7 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 		od;
 	end: #Deduce_ObjRules
 	#trace(Deduce_ObjRules);
-
+	trace(hamphu):
 	#Deduce_Objects BODY
 	#BUOC 1 -----------------------------------
 	#Do tim cac tinh chat ben trong cau truc doi tuong
@@ -1069,7 +1074,7 @@ GeometryConicSolver[Deduce_Rules]:=proc()
 		local h,tt,doi,j,s, i, return_,phu;
 		global DF3;
 		return_:={};
-
+		
 		for i in ReRule[5] do
 			if not type(i,`=`) then
 				tt:=op(0,i);

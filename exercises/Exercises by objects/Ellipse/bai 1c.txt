@@ -1,0 +1,45 @@
+﻿#-----------------
+Thu Trang Elip bai 1
+#------------------
+Cho elip (E): 16x^2+7y^2-112=0. 
+	a.Tính tọa độ các tiêu điểm và tâm sai của (E)
+	b.Đường thẳng (d) vuông góc với trục lớn tại F1, cắt (E) tại M và N. Tính tọa độ M, N. Tính MF1, MF2, MN
+=>	c.Tìm P trên (E) sao cho PF2 = 3PF1
+ 
+Sách 4/ 250
+
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	P: Diem
+	a,b: Doan
+    end_objects
+
+	facts:
+		E.f = (16*x*x + 7*y*y - 112 = 0)
+		["Thuoc",P,E]
+		a = Doan[P,E.F2], b = Doan[P,E.F1]
+		a.length = 3 * (b.length)
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	P
+  end_goals
+
+end_exercise

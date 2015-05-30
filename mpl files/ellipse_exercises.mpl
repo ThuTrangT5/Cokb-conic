@@ -9,9 +9,10 @@
 
 ellipseUrl :=  cat(packageUrl,"\\exercises\\Exercises by objects\\Ellipse");
 Reset_Onet():
-#ReadExer(cat(ellipseUrl,"\\bai 1.txt"));
+#ReadExer(cat(ellipseUrl,"\\bai 1a.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 6.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 15.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 15b.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 15c.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 3b.txt"));
+ReadExer(cat(ellipseUrl,"\\bai 1c.txt"));

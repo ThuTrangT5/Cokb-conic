@@ -75,7 +75,7 @@ GeometryConicSolver[Kind_Fact]:=proc(fact)
 				f4new:= lhs(fact).length = rhs(fact).length;
 				if not member(f4new, Fact_Kinds[4]) then
 					Fact_Kinds[4] := [op(Fact_Kinds[4]), f4new];
-					Sol :=[op(Sol), ["Deduce_FromObjectDoan",[],fact,{f4new}]]; 
+					Sol :=[op(Sol), ["Deduce_FromObjectDoan",[],{fact},{f4new}]]; 
 				fi;
 			fi;
 			return 4;
