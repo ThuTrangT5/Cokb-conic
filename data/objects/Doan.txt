@@ -40,4 +40,3 @@ begin_object: Doan[A,B];
   end_functions
 
 end_object
-

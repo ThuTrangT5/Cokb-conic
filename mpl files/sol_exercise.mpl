@@ -264,7 +264,7 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 		
 		# hamphu: tính giá trị các goals theo các procs của object rules
 		hamphu:=proc()
-			local h,tt,doi,j,s, i, return_;
+			local h,tt,doi,j,s, i, valueDoij, return_;
 			global DF3;
 
 			return_:={};
@@ -363,8 +363,7 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 			fi;
 		od;
 	end: #Deduce_ObjRules
-	#trace(Deduce_ObjRules);
-	trace(hamphu):
+	
 	#Deduce_Objects BODY
 	#BUOC 1 -----------------------------------
 	#Do tim cac tinh chat ben trong cau truc doi tuong

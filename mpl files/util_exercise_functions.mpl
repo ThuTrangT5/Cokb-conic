@@ -5,7 +5,7 @@
 
 #Ap dung rule tren tap FactSet
 GeometryConicSolver[ApplyRule] := proc(rule, FactSet)
-	local  fact, setfact, news, pr, time1;
+	local  fact, setfact, news, pr, time1,  i, hypos, hypo5s, hypo, vars, f3;
 	
 	#gia thiet nam trong FactSet
 	if Unify_In1(rule[4][1], FactSet)  then 
@@ -26,7 +26,35 @@ GeometryConicSolver[ApplyRule] := proc(rule, FactSet)
 			return news;
 		fi;
 	else  
-		RETURN ({});
+		#RETURN ({});
+		#Xét những fact chưa có trong tập FactSet có phải là fact loại 5 hay k?		
+		hypos := rule[4][1] minus FactSet;
+		hypo5s := {};
+		for i from 1 to nops(hypos) do
+			hypo := hypos[i];
+			if Kind_Fact(hypo) = 5 then
+				hypo5s := hypo5s union {hypo};
+				vars := Set_Vars(hypo);
+				if `subset`(vars, {op(Fact_Kinds[2])}) = false then return ({});fi;
+				
+				#Tìm và thay thế các fact3 vào rule hypo 
+				for f3 in Fact_Kinds[3] do
+					if member(lhs(f3), vars) then
+						hypo := subs(f3,hypo);
+						if hypo then break;fi;
+					fi;
+				od;				
+				if not hypo then
+					return ({});					
+				fi;
+			fi;
+		od;
+		
+		if hypo5s <> {} then
+			return rule[4][2];
+		fi;
+		
+		return ({});
 	fi;
 end proc: #  ApplyRule 
 

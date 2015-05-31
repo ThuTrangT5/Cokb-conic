@@ -30,6 +30,21 @@ begin_rule 1
       	end_goal_part
 end_rule
 
+
+begin_rule 4
+      	kind_rule = "";
+      	hypothesis_part:  
+        		{a,b,c}
+     	end_hypothesis_part
+      	goal_part: 
+        		{f= (a*x + b*y + c = 0)}
+      	end_goal_part
+end_rule
+end_rules
+begin_functions
+end_functions
+end_object
+
 begin_rule 2
       	kind_rule = "chuyen tu pt dang tham so sang tong quat";
       	hypothesis_part:  
@@ -50,15 +65,7 @@ begin_rule 3
       	end_goal_part
 	proc: f2 = tq_ts[f];
 end_rule
-begin_rule 4
-      	kind_rule = "";
-      	hypothesis_part:  
-        		{a,b,c}
-     	end_hypothesis_part
-      	goal_part: 
-        		{f= (a*x + b*y + c = 0)}
-      	end_goal_part
-end_rule
+
 begin_rule 5
       	kind_rule = "";
       	hypothesis_part:  
@@ -69,8 +76,3 @@ begin_rule 5
       	end_goal_part
 	proc: f2 = tq_ts[f];
 end_rule
-end_rules
-begin_functions
-end_functions
-end_object
-

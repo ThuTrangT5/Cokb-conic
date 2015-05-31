@@ -1,0 +1,40 @@
+﻿#-----------------
+Thu Trang Elip bai 11a
+#------------------
+Lập phương trình tiếp tuyến của (E): x^2/1+y^2/21=1, biết
+	a. Tiếp tuyến đi qua A(0;√21)
+
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	A: Diem
+	d: DuongThang
+    end_objects
+
+	facts:
+		E.f1 = (x^2/1+y^2/21=1), A=[0,sqrt(21)]
+		["TiepTuyen",d,E]
+		["Thuoc",A,d]
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	d
+  end_goals
+
+end_exercise
