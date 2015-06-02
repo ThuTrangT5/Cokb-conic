@@ -1,6 +1,11 @@
-﻿begin_object: DuongThang; 
+﻿f1: phương trình tổng quát,
+f2: phương trình tham số
+f: phương trình bất kỳ
+
+begin_object: DuongThang; 
 begin_variables
     	f: PhuongTrinh
+	f1: PhuongTrinh
 	f2: HePhuongTrinh
 	a,b,c: Real
 end_variables
@@ -37,7 +42,7 @@ begin_rule 4
         		{a,b,c}
      	end_hypothesis_part
       	goal_part: 
-        		{f= (a*x + b*y + c = 0)}
+        		{f1= (a*x + b*y + c = 0)}
       	end_goal_part
 end_rule
 end_rules

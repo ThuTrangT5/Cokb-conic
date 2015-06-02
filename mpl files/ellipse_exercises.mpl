@@ -16,6 +16,6 @@ Reset_Onet():
 #ReadExer(cat(ellipseUrl,"\\bai 15c.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 3b.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 1c.txt"));
-ReadExer(cat(ellipseUrl,"\\bai 11a.txt"));
-
+#ReadExer(cat(ellipseUrl,"\\bai 11a.txt"));
+ReadExer(cat(ellipseUrl,"\\bai 9b.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 6b.txt")); #=> Bài này kết quả ra 2 nghiệm thõa đề bài nên chưa làm

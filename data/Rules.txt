@@ -21,7 +21,7 @@ begin_rule 2
 		{["Thuoc",M,d],["Thuoc",M,E],["TiepTuyen",d,E]}
 	end_hypothesis_part
 	goal_part
-		{d.f = ((M.x*x)/(E.a)^2 + (M.y*y)/(E.b)^2 = 1)}
+		{d.f = (((M.x)*x)/(E.a)^2 + ((M.y)*y)/(E.b)^2 = 1)}
 	end_goal_part
 end_rule
 
@@ -37,7 +37,20 @@ begin_rule 3
 	end_goal_part
 end_rule
 
+begin_rule 4
+	kind_rule="";
+	d : DuongThang;
+	E : Elip;
+	hypothesis_part
+		{["TiepTuyen",d,E]}
+	end_hypothesis_part
+	goal_part
+		{(d.a)^2*(E.a)^2 + (d.b)^2*(E.b)^2 = (d.c)^2}
+	end_goal_part
+end_rule
+
 end_rules
+-------------------------------------------
 begin_rule 2
    	kind_rule = "xac_dinh";
 	M,N:Diem;

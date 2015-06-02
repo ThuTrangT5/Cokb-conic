@@ -532,13 +532,15 @@ GeometryConicSolver[Deduce_From53s]:=proc()
 	Obj_Attr_Types := [op(Obj_Types), op(OAttr_Types)];#chứa kiểu của các Objects và Attributes của bài toán
 
 	for fact5 in Fact_Kinds[5] do
-		if member(fact5,DF53) then next;fi;
+		if member(fact5,DF53) then next;fi;		
+		vars5:= Set_Vars(fact5);
+		if `subset`(vars5, {op(Fact_Kinds[3])}) then next; fi; 
+		
 		if(type(rhs(fact5),`=`)) then
 			news := rhs(fact5);
 		else
 			news := fact5;#news:=lhs(fact5)-rhs(fact5)=0;
-		fi;
-		vars5:= Set_Vars(fact5);		
+		fi;		
 		
 		for f in vars5 do
 			i :='i';
@@ -574,7 +576,7 @@ GeometryConicSolver[Deduce_From53s]:=proc()
 			fi;
 		fi;
 	od;
-end proc: # Deduce_From5s3s
+end proc: # Deduce_From53s
 
 # Deduce_From45s & Deduce_From45
 GeometryConicSolver[Deduce_From45] := proc(fact5)
@@ -1118,6 +1120,9 @@ GeometryConicSolver[Deduce_Rules]:=proc()
 				
 				#B3: xet tung to hop va the cac phan tu trong to hop vao luat
 				ReRule:=ReplaceR(Cb,i);
+				#Trang thêm dòng này
+				#Không apply những rule có goals là sự kiện đã được phát sinh
+				if `subset`(ReRule[4][2], Facts) or  `subset`(ReRule[4][2], FactSet) then next; fi;
 				
 				#B4: kiem tra to hop nay co ap dung dc ko-neu co thi luu su kien moi sinh ra vao news 
 				news:=ApplyRule(ReRule,FactSet);
