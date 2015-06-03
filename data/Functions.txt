@@ -14,6 +14,7 @@
 	Real DuongThang_a(PhuongTrinh){"Object"}
 	Real DuongThang_b(PhuongTrinh){"Object"}
 	Real DuongThang_c(PhuongTrinh){"Object"}
+	PhuongTrinh DuongThang_f1(PhuongTrinh){"Object"}
 
 end_functions
 
@@ -22,6 +23,7 @@ end_functions
 	Diem Parabol_Dinh(PhuongTrinh){"Object"}
 	Real Parabol_p(PhuongTrinh){"Object"}
 	PhuongTrinh Parabol_DuongChuan(PhuongTrinh){"Object"}
+
 
 
 

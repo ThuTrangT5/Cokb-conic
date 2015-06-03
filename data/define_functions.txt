@@ -177,4 +177,36 @@
 		end_proc
 	end_function
 
+	begin_function: DuongThang_a(f)
+		f: PhuongTrinh
+		return a: Real
+		begin_proc
+			return coeff(lhs(f),x,1);
+		end_proc
+	end_function
+
+	begin_function: DuongThang_b(f)
+		f: PhuongTrinh
+		return b: Real
+		begin_proc
+			return coeff(lhs(f),y,1);
+		end_proc
+	end_function
+
+	begin_function: DuongThang_c(f)
+		f: PhuongTrinh
+		return c: Real
+		begin_proc
+			return lhs(f)-coeff(lhs(f),x,1)-coeff(lhs(f),y,1);
+		end_proc
+	end_function
+
+	begin_function: DuongThang_f1(f)
+		f: PhuongTrinh
+		return f1: PhuongTrinh
+		begin_proc
+			return lhs(f)- coeff(lhs(f),x,1)*x - coeff(lhs(f),y,1)*y;
+		end_proc
+	end_function
+
 end_functions

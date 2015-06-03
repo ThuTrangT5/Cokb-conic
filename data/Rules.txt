@@ -13,7 +13,7 @@ begin_rule 1
 end_rule
 
 begin_rule 2
-	kind_rule="";
+	kind_rule="phan doi toa do";
 	M : Diem; 	
 	E : Elip;
 	d : DuongThang
@@ -46,6 +46,18 @@ begin_rule 4
 	end_hypothesis_part
 	goal_part
 		{(d.a)^2*(E.a)^2 + (d.b)^2*(E.b)^2 = (d.c)^2}
+	end_goal_part
+end_rule
+
+begin_rule 5
+	kind_rule="";
+	d : DuongThang;
+	A : Diem;
+	hypothesis_part
+		{["Thuoc",A,d]}
+	end_hypothesis_part
+	goal_part
+		{(A.x)*(d.a) + (A.y)*(d.b) + (d.c) = 0}
 	end_goal_part
 end_rule
 

@@ -35,16 +35,52 @@ begin_rule 1
       	end_goal_part
 end_rule
 
+begin_rule 2
+      	kind_rule = "xac_dinh_doi_tuong";
+      	f:PhuongTrinh
+      	hypothesis_part:  
+        		{f1}
+      	end_hypothesis_part
+      	goal_part: 
+        		{"Object"}
+      	end_goal_part
+end_rule
+
+begin_rule 3
+      	kind_rule = "";
+      	hypothesis_part:  
+        		{f}
+     	end_hypothesis_part
+      	goal_part: 
+        		{f1}
+      	end_goal_part
+	proc: f1 = DuongThang_f1(f);
+end_rule
 
 begin_rule 4
       	kind_rule = "";
-      	hypothesis_part:  
+      	hypothesis_part:
         		{a,b,c}
      	end_hypothesis_part
       	goal_part: 
         		{f1= (a*x + b*y + c = 0)}
       	end_goal_part
 end_rule
+
+begin_rule 5
+      	kind_rule = "";
+      	f:PhuongTrinh
+      	hypothesis_part:  
+        		{f1}
+      	end_hypothesis_part
+      	goal_part: 
+        		{a,b,c}
+      	end_goal_part
+	proc: a = DuongThang_a(f1);
+	proc: b = DuongThang_b(f1);
+	proc: c = DuongThang_c(f1);
+end_rule
+
 end_rules
 begin_functions
 end_functions
