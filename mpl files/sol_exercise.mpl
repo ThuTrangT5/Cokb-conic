@@ -10,15 +10,25 @@
 # OptimizeSol : lời giải đã rút gọn
 
 GeometryConicSolver[Deduce_Objects]:=proc()
-	local i,k,j;
+	local i, k, j, obj;
 	global Fact_Kinds;
 	
-	for i from 1 to nops(Objects) do
+	(*for i from 1 to nops(Objects) do
 		if isPrint= true then print("7.0 - Deduce_Objects : ",Objects[i]); 
 		fi;
 		Deduce_Object(Objects[i]);
 		if flag and Test_Goal(Goal,FactSet) then next;fi;
+	od;*)
+	# Trang sửa vòng for
+	i := 1;
+	do
+		obj := Objects[i];
+		if isPrint= true then print("7.0 - Deduce_Objects : ",obj); fi;
+		Deduce_Object(obj);
+		i := i+1;
+		if i > nops(Objects) then break; fi;
 	od;
+	# Trang - end
 	return [Fact_Kinds,Sol]; 
 end proc: # Deduce_Objects
 
@@ -308,17 +318,8 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 		end:#hamphu
 		
 		# Deduce_ObjecRules BODY
-		if isPrint = true then 
-			#lprint("BEGIN Deduce_ObjRules");
-			#print("TestOR = ",TestOR);
-			#printf("ObjStructTemp[8] = ");
-			#print(ObjStructTemp[8]);
-		fi;
-				
-		#flag := false; #Them moi => dang check
 		objRules := OrderRulesByGoals(ObjStructTemp[8]); # Trang them moi
-				
-		#for rule in ObjStructTemp[8] do
+
 		for rule in objRules do
 		
 			#if member([d,rule],TestOR) then next;fi;
@@ -326,14 +327,10 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 			checkMember := {[d,rule]} intersect {op(TestOR)}; #member([d,rule],TestOR);
 			if checkMember <> {} then
 				next;
-			(*else 
-				print("NEW =>", [d,rule]);
-				print("TestOR => ",TestOR);
-				print("checkMember1 = ", checkMember);
-				print("checkMember2 = ", member([d,rule],TestOR));*)
 			fi;
 			
 			news := ApplyRule(rule,FactSet);
+
 			if news<>{}then
 				if isPrint= true then 
 					print("ApplyRule rule = ",rule);
@@ -523,7 +520,7 @@ end proc: # Deduce_From8s
 
 #Deduce_From53s :suy ra su kien moi loai 3, 4, 5 tu 1 su kien 5 va nhieu su kien 3 bang cach the cac su kien 3 vao su kien 5
 GeometryConicSolver[Deduce_From53s]:=proc()
-	local fact5,fact3,news, vars5,f, k,f3,numOfNewsVars, fact3vars,i, Obj_Attrs, Obj_Attr_Types;
+	local fact5,fact3,news, vars5,f, k,f3,numOfNewsVars, fact3vars,i, Obj_Attrs, Obj_Attr_Types, multiResult;
 	global Fact_Kinds,FactSet,Sol,flag,DF53;
 	
 	f3:=[];
@@ -559,22 +556,42 @@ GeometryConicSolver[Deduce_From53s]:=proc()
 		od;
 
 		numOfNewsVars := nops(Set_Vars(news));
+		
+		#Trang insert : begin 1
+		if numOfNewsVars >= nops(vars5) then next; fi;
+		
+		multiResult := {}; #Biến chứa nhiều nghiệm đúng của 1 đối tượng
+		#Trang insert : end
+		
 		if numOfNewsVars = 0 then
 			news:= lhs(fact5) = news;
 			numOfNewsVars := numOfNewsVars+1;
 		elif numOfNewsVars = 1 then
-			news:=MySolve(news,Set_Vars(news),1)[1][1];	
+			# kết quả của MySolve có dạng:  {{dt.c = -4}, {dt.c = 4}}
+			#news:= MySolve(news,Set_Vars(news),1)[1][1];
+			
+			#Trang insert : begin (code này thay cho dòng trên)
+			multiResult := MySolve(news,Set_Vars(news));			
+			news := multiResult[1][1];
+			#Trang insert : end
+			
 		fi;
-		if numOfNewsVars < nops(vars5) then
+		#if numOfNewsVars < nops(vars5) then #Trang bỏ dòng này
 			DF53:= DF53 union {fact5};
 			k := Kind_Fact(news);
 			if k>=1 and k<=11 and not Unify_In1(news,FactSet) then
-				Fact_Kinds[k]:= [op(Fact_Kinds[k]),news];
+				#Trang insert : begin 
+				if nops(multiResult) > 1 then
+					news := CreateNewObjectsWithMultiResult(multiResult);
+				else
+				#Trang insert : end			
+					Fact_Kinds[k]:= [op(Fact_Kinds[k]),news];
+				fi;
 				FactSet:= FactSet union {news};
 				Sol:=[op(Sol),["Deduce_From53s",[],{fact5,op(f3)},{news}]];
-				flag:= true;
+				flag:= true;				
 			fi;
-		fi;
+		#fi;
 	od;
 end proc: # Deduce_From53s
 
@@ -1927,7 +1944,7 @@ end proc:#XulyGoal_Bandau
 
 #Determine_Goals
 GeometryConicSolver[Determine_Goals]:=proc()
-	local Init, Goal, time1;
+	local Init, Goal, time1, i;
 	local TrSolve, s;
 	global FactSet, TestF, TestR,TestOR,TestOCR,Sol,Goals,DF3, DF43,DF53,DF45, DF9, DF8,TestProp,chiso, Sols,TEST_, Goal_ThehienTrongLoiGiai;
 	
@@ -1954,7 +1971,11 @@ GeometryConicSolver[Determine_Goals]:=proc()
 	# Determin_Goals BODY
 	Init();
 	Sol:=[]; 
-	for Goal in Goals do
+	#for Goal in Goals do
+	#Trang sửa đoạn này
+	i := 1;
+	do
+		Goal := op(i,Goals);
 		if Test_Goal(Goal,FactSet) then 
 			if isPrint= true then printf("(@_@)Bai toan khong can giai\n");
 			fi;
@@ -1965,6 +1986,9 @@ GeometryConicSolver[Determine_Goals]:=proc()
 			Output_Result(Goal_ThehienTrongLoiGiai);
 		fi;
 		Sols:={op(Sols),Sol};
+		
+		i := i+1;
+		if i > nops(Goals) then break; fi;
 	od;
 	
 	#lprint(`Total Time`,time()-time1);

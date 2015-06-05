@@ -147,17 +147,20 @@ GeometryConicSolver[MySolve]:=proc(eqns,vars)
 	local tapnghiem,nghiem, result, flag,fact, expr;
 	result:={};
 	
-	#B1: Giai phuong trinh hay he phuong trinh
+	#B1: Giải phương trình hoặc hệ phương trình theo biến
 	tapnghiem := [solve(eqns, vars)]; 
-	# VD: nghiem={{a=0,b=3},{a=1,b=2}}
+	# Kết quả (ví dụ): tapnghiem={{a=0,b=3},{a=1,b=2}}
+	
+	#B2: Loai nghiem RootOf
 	tapnghiem := Xuly_RootOf(tapnghiem);
 
-	#B2: Loai nghiem RootOf,nghiem an, nghiem phuc
+	#B3: Loại nghiệm ẩn, nghiệm phức
 	for nghiem in tapnghiem do
 		flag := true;
 		for fact in nghiem do
 			expr := rhs(fact);
-			if (nargs = 3 and evalb(Signof(expr) <= 0) = true) or SearchText("I", convert(expr, string)) > 0 then
+			#if (nargs = 3 and evalb(Signof(expr) <= 0) = true) or SearchText("I", convert(expr, string)) > 0 then
+			if SearchText("I", convert(expr, string)) > 0 then #Trang sửa dòng này thay cho dòng trên
 				flag := false;break;
 			fi;
 		od;

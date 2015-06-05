@@ -1,0 +1,45 @@
+﻿#-----------------
+Thu Trang Elip bai 14
+#------------------
+Cho elip (E):  x^2/9+y^2/3=1. 
+Xác định tọa độ đỉnh B, C của tam giác đều ABC nội tiếp trong (E) 
+biết A(3;0)
+ 
+Sách 2/ 273
+
+------
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	A,B,C: Diem
+	a,b,c: Doan
+    end_objects
+
+	facts:
+		E.f1 = (x^2/9 + y^2/3 = 1), A = [3,0]
+		["Thuoc",A,E], ["Thuoc",B,E], ["Thuoc",C,E]
+		a = Doan[B,C], b = Doan[A,C], c = Doan[A,B]
+		a.length = b.length, b.length = c.length
+		B.x>0
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	B,C
+  end_goals
+
+end_exercise

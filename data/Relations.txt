@@ -3,6 +3,10 @@
 	#Điểm và Đường thẳng
 	[Thuoc, Diem, DuongThang],{}
 
+	#Đường thẳng và đường thẳng
+	[Vuong, DuongThang, DuongThang],{}
+	[SongSong, DuongThang, DuongThang],{}
+
 	#Điểm và Elip	
 	[Thuoc, Diem, Elip],{}
 

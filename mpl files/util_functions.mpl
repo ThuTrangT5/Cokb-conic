@@ -203,3 +203,83 @@ GeometryConicSolver[Set_Vars]:=proc(expr)
 		return F;
 	fi;
 end proc: # Set_Vars
+
+#Sao chép obj thành n obj khác
+GeometryConicSolver[CopyObject]:= proc(obj, n)
+	global Fact_Kinds;
+	local objName, objType, objFacts, newNames, newTypes, newFacts, newGoals, newName, facts, i, j;
+
+	objName  := convert(obj,string); #tên của đối tượng dưới dạng String
+	objType  := type_Onet(obj);#kiểu của đối tượng
+	objFacts :=  [[], [], [], [], [], [], [], [], [], [], []];#Các sự kiện có mặt đối tượng 
+	
+	newNames := [];
+	newTypes := [];
+	newFacts := [[], [], [], [], [], [], [], [], [], [], []];
+	newGoals := [];
+	
+	for i from 1 to 11 do 
+		objFacts[i] := select(has,Fact_Kinds[i], obj);
+	od;
+	for i from 1 to n do
+		newName := parse(cat(objName, i));
+		newNames := [op(newNames), newName];
+		newTypes := [op(newTypes), objType];
+		
+		for j from 1 to 11 do 
+			facts := subs(obj = newName, objFacts[j]);
+			newFacts[j] := [op(newFacts[j]), op(facts)];
+		od;
+	od;
+	
+	if member(obj, Goals) then
+		newGoals := newNames;
+	fi;
+	
+	return [newNames, newTypes, newFacts, newGoals];
+end:
+
+#Phát sinh thêm đối tượng khi tìm được nhiều nghiệm đúng cho đối tượng hoặc thuộc tính của đối tượng đó
+#Trường hợp này chỉ phát sinh khi có sự kiện loại 3 được sinh ra
+GeometryConicSolver[CreateNewObjectsWithMultiResult]:= proc(results)
+	global Fact_Kinds, FactSet, Sol, Objects, Obj_Types, Goals;
+	local obj, n, i, newObjs, newFact3s, r, f3;
+
+	obj := lhs(results[1][1]);
+	if type(obj,`.`) then
+		obj := op(1,obj);
+	fi;
+	n := nops(results)-1;
+	
+	newObjs := CopyObject(obj, n);
+	newFact3s := {results[n+1][1]}; 
+	
+	for i from 1 to n do
+		r := results[i];
+		f3 := subs(obj=newObjs[1][i], r);
+		newFact3s := newFact3s union f3;
+	od;
+	
+	newObjs[3][3] := [op(newObjs[3][3]), op(newFact3s)];
+	
+	#--- Update ---
+	#1. Objects, ObjTypes, OAttrs & OAttr_Types
+	Objects := [op(Objects), op(newObjs[1])];
+	Obj_Types := [op(Obj_Types), op(newObjs[2])];
+	# OAttrs & OAttr_Types => Do NOT update => TODO later
+	
+	#2. Update Fact_Kinds
+	for i from 1 to 11 do 
+		Fact_Kinds[i]:= [op(Fact_Kinds[i]), op(newObjs[3][i])];
+		FactSet:= FactSet union {op(newObjs[3][i])};
+	od;
+	
+	#3. DF53, FactSet, Sol
+	Sol:=[op(Sol),["New_Object",[],{obj}, {op(newObjs[1])}]];
+	
+	#4. Goals
+	Goals := [op(Goals), op(newObjs[4])];
+	#--- End Update ---
+	
+	return op(newFact3s);
+end:
