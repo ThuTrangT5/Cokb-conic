@@ -1,0 +1,42 @@
+﻿#-----------------
+Thu Trang Elip bai 11
+#------------------
+Lập phương trình tiếp tuyến của (E): x^2+y^2/21=1, biết
+	a. Tiếp tuyến đi qua A(0;√21)
+	b. Tiếp tuyến đi qua B(-5/2;0)
+	c. Tiếp tuyến song song với đường thẳng (∆) : 2x + y + 3 = 0
+ 
+Sách 2/ 219
+---------
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	d,dt: DuongThang	
+    end_objects
+
+	facts:
+		E.f =  ( x^2 + y^2/21 = 1)
+		d.f1 = ( 2*x + y + 3 = 0)
+		["TiepTuyen",dt,E], ["SongSong",d,dt]
+    end_facts
+	
+    functions:
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	dt
+  end_goals
+
+end_exercise

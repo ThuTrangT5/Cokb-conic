@@ -71,6 +71,18 @@ begin_rule 6
 		{d1.a=d2.a, d1.b=d2.b, d1.c<>d2.c}
 	end_goal_part
 end_rule
+
+end_rulesbegin_rule 7
+	kind_rule="quan he giua 2 duong thang";
+	d1,d2 : DuongThang;
+	hypothesis_part
+		{["Vuong",d1,d2]}
+	end_hypothesis_part
+	goal_part
+		{d1.a = d2.b, d1.b = -d2.a}
+	end_goal_part
+end_rule
+
 end_rules
 -------------------------------------------
 begin_rule 2
