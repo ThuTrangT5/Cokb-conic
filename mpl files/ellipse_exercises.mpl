@@ -22,7 +22,8 @@ Reset_Onet():
 #ReadExer(cat(ellipseUrl,"\\bai 12a.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 12b.txt"));
 #ReadExer(cat(ellipseUrl,"\\bai 11c.txt"));
-ReadExer(cat(ellipseUrl,"\\bai 10b.txt"));
+#ReadExer(cat(ellipseUrl,"\\bai 10b.txt"));
 
-#ReadExer(cat(ellipseUrl,"\\bai 9c.txt")); #=> Bai nay 2 nghiem
+ReadExer(cat(ellipseUrl,"\\bai 9c.txt")); #=> Bai nay 2 nghiem
+
 #ReadExer(cat(ellipseUrl,"\\bai 6b.txt")); #=> Bài này kết quả ra 2 nghiệm thõa đề bài nên chưa làm

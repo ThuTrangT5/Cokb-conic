@@ -46,6 +46,9 @@ GeometryConicSolver[Init] := proc ()
 	readDefineFunctionsTXT(fileName);
 	fileName := cat(url, "/data/Rules.txt");
 	readRulesTXT(fileName);
+	fileName := cat(url, "/data/Sample_Exercise.txt");
+	readSampleExerciseTxt(fileName);
+
 end proc:
 
 #Read file Objects.txt
@@ -381,13 +384,13 @@ GeometryConicSolver[readFunctionsTXT] := proc (fileName::string)
 	properties := {}; 
 	
 	fd := fopen(fileName, READ, TEXT); 
-		line := readline(fd); 
-		while line <> 0 and SearchText("begin_functions", line) = 0 do 
-		      line := readline(fd) 
-		end do; 
-		line := readline(fd); 
-		# tim vi tri k khac " " bat dau tu dau chuoi, vd: "  line", k=3 (ngay chu l)
-		Vitrik := proc (line) 
+	line := readline(fd); 
+	while line <> 0 and SearchText("begin_functions", line) = 0 do 
+	      line := readline(fd) 
+	end do;
+	line := readline(fd); 
+	# tim vi tri k khac " " bat dau tu dau chuoi, vd: "  line", k=3 (ngay chu l)
+	Vitrik := proc (line) 
 		local k, s, n, i; 
 		n := length(line); 
 		i := 1; 
@@ -780,4 +783,86 @@ GeometryConicSolver[ObjStruct] := proc (objName::string, s)
 		Obj_Structs[i][2]:= ReadCObject(cat(url,"/data/Objects/",objName,".txt"));
 	fi;
 	return(Obj_Structs[i][2]);
+end proc:
+
+# Hàm đọc cấu trúc file Sample_Exercise.txt
+GeometryConicSolver[readSampleExerciseTxt] := proc(fileName::string)
+	global Sample_Exes;
+	local fd, line, k, objName, objType, hypos, goals, procs, procName, procParams;
+	
+	Sample_Exes := [];
+	fd := fopen(fileName, READ, TEXT); 
+	
+	line := readline(fd);
+	while line<>0 and SearchText("begin_samples", line) = 0 do
+		line := readline(fd);
+	od;
+	
+	while line<>0 and SearchText("end_samples", line) = 0 do
+		line := readline(fd);
+		
+		while line<>0 and SearchText("end_sample", line) = 0 do	
+			objName := [];
+			objType := [];
+			hypos := [];
+			goals := [];
+			procs := [];
+				 
+			# read objects
+			line := readline(fd);
+			while line <> 0 and SearchText("end_objects", line) = 0 do
+				k := SearchText(":", line);
+				if k > 0 then				
+					objName := [op(objName),parse(substring(line, 1..k-1))];
+					objType := [op(objType),convert(parse(substring(line, k+1..-1)), string)];
+				fi;
+				line := readline(fd);
+			od;
+			
+			# read Hypoes			
+			line := readline(fd);
+			while line <> 0 and SearchText("end_hypos", line) = 0 do
+				if line <> "" and SearchText("begin_hypos", line) = 0 then
+					hypos := [op(hypos), parse(line)];
+				fi;
+				line := readline(fd);
+			od;
+			
+			# read Goals
+			line := readline(fd);
+			while line <> 0 and SearchText("end_goals", line) = 0 do
+				if line <> "" and SearchText("begin_goals", line) = 0 then
+					goals := [op(goals), parse(line)];
+				fi;
+				line := readline(fd);
+			od;
+			
+			#read procs
+			line := readline(fd);
+			while line <> 0 and SearchText("end_sample", line) = 0 do
+				if line <> "" and SearchText("begin_hypos", line) = 0 then
+					k := SearchText(":", line);
+					if k > 0 then
+						line := substring(line, k+1..-1);
+						
+						k := SearchText("(", line);
+						procName := substring(line,1..k-1);
+						line := substring(line, k+1..-1);
+						
+						k := SearchText(")", line);
+						procParams := [parse(substring(line, 1..k-1))];
+						
+						procs := [op(procs), [procName, procParams]];
+					fi;
+				fi;
+				line := readline(fd);
+			od;
+			if nops(objName) > 0 then
+				Sample_Exes := [op(Sample_Exes), [objName, objType, hypos, goals, procs]];
+			fi;
+			
+			line := readline(fd);
+		od;
+	od;
+	fclose(fd);
 end proc:

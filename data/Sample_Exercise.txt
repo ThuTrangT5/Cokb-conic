@@ -1,0 +1,42 @@
+This is sample exercise file
+...
+...
+
+begin_samples
+
+	begin_sample
+		begin_objects
+			E: Elip
+		end_objects
+		
+		begin_hypos
+			E.f1
+		end_hypos
+			
+		begin_goals
+			E.a, E.b, E.c, E.e
+			E.F1, E.F2, E.A1, E.A2, E.B1, E.B2			
+			E.TrucLon, E.TrucNho
+		end_goals
+		proc: TimThanhPhanElip(E.f)
+	end_sample
+
+	begin_sample
+		begin_objects
+			E: Elip
+			d: DuongThang
+			M: Diem
+		end_objects
+		
+		begin_hypos
+			E.f1, M
+			["Thuoc",M,d]
+		end_hypos
+			
+		begin_goals
+			d.f1
+		end_goals
+		proc: TiepTuyenElipQuaM(E,M,d)
+	end_sample
+
+end_samples

@@ -215,3 +215,85 @@ DuongThang_pt2d := proc(M,N)
 	return subs(kq,f);
 end proc:
 
+TiepTuyenElipQuaM := proc(E,M,d)
+	global Objects,Obj_Types,Fact_Kinds,Sol, FactSet; 
+	local sol0,pt1,sol1,pt2,sol2,pt3,sol3,sol4,result, ef, df, xM, yM, x1, y1, test;
+lprint("Goto TiepTuyenElipQuaM");
+
+	ef := Get_Values(E.f1);
+	df := subs({x^2 = x*(x0), y^2 = y*(y0)}, ef);
+	xM := M[1];
+	yM := M[2];
+	
+	# Kiem tra M co thuoc E hay khong
+	test := subs({x = xM, y = yM}, lhs(ef));
+	if test = 1 then 
+		df := subs({x0 = xM, y0 = yM}, df);
+		return df;
+	fi;
+	
+	# Goi M0 la tiep diem cua E va d
+	sol0 := [["Tao doi tuong moi"], [], {}, {M0=[x0,y0],["Thuoc",M0, E], ["Thuoc", M0, d]}];
+	
+	pt1 := subs({x = x0, y = y0}, ef);
+	sol1 := [["Deduce_Rules"], [], {["Thuoc",M0, E]}, {pt1}];
+	
+	pt2 := df;
+	sol2 := [["Deduce_Rules"], [], {["Thuoc",M0, d], ["Thuoc",M0, E], ["TiepTuyen",d,E]}, {pt2}];
+	
+	pt3 := subs({x = xM, y = yM}, df);
+	sol3 := [["Deduce_Rules"], [], {["Thuoc",M, d]}, {pt3}];
+	
+	result:= [solve({pt1,pt3}, {x0, y0})];
+	sol4 := [["Deduce_EqsGoal"], [], {pt1,pt2,pt3}, {result}];
+	
+	if nops(result)= 0 then return; fi; 
+		
+	Fact_Kinds[3]:= [op(Fact_Kinds[3]), M0=[rhs(result[1][1]), rhs(result[1][2])]];
+	#Fact_Kinds[3]:= [op(Fact_Kinds[3]), d.f = subs(result[1], df)];	
+	Objects := [op(Objects), M0];
+	Obj_Types := [op(Obj_Types), "Diem"];
+	Fact_Kinds[6] := [op(Fact_Kinds[6]), ["Thuoc",M0, E], ["Thuoc", M0, d]];
+	Sol := [op(Sol), sol0, sol1, sol2, sol3, sol4];
+	FactSet:= FactSet union {M0=[rhs(result[1][1]), rhs(result[1][2])]};
+	
+	if nops(result) = 2 then
+		x1 :=  rhs(result[2][1]);
+		y1 := rhs(result[2][2]);
+		Fact_Kinds[3]:= [op(Fact_Kinds[3]), M1=[x1,y1]];
+		Fact_Kinds[3]:= [op(Fact_Kinds[3]), d1.f = subs(result[2], df)];
+				
+		Objects := [op(Objects), M1, d1];
+		Obj_Types := [op(Obj_Types), "Diem", "DuongThang"];
+		FactSet:= FactSet union {M1=[x1,y1]};
+		Sol := [op(Sol), [["Tao doi tuong moi"], [], {}, {M1=[x1,y1], d1,["Thuoc",M1, E], ["Thuoc", M1, d1], d1.f = subs(result[2], df)}]];
+	fi;
+	
+	return {};
+end proc:
+
+TimThanhPhanElip := proc(ptct)
+	local a,b,c,e,F1,F2,A1,A2,B1,B2,TrucLon, TrucNho;
+	
+	a := 1/(coeff(lhs(ptct),x,2));
+	b := 1/coeff(lhs(ptct),y,2);
+	
+	if (convert(a-b,float)>0) then
+		c := sqrt(a^2 - b^2);		
+		TrucLon := 2*a;
+		TrucNho := 2*b
+	else
+		c := sqrt(b^2 - a^2);		
+		TrucLon := 2*b;
+		TrucNho := 2*a
+	fi;
+	e := c/a;
+	F1 := [-c,0];
+	F2 := [c,0];
+	A1 := [-a,0];
+	A2 := [a,0];
+	B1 := [-b,0];
+	B2 := [b,0];
+	lprint("GO HERE");
+	return [a,b,c,e,F1,F2,A1,A2,B1,B2,TrucLon,TrucNho];	
+end proc:

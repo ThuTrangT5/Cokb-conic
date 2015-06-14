@@ -1,0 +1,43 @@
+﻿#-----------------
+Thu Trang Hyperbol bai 1
+#------------------
+Cho (H)  x^2/4−y^2/12=1, trong đó F1, F2 là tiêu điểm trái và phải của hypebol.
+Tìm M thuộc (H) sao cho MF2 = 2MF1
+(Loại bài toán xác định điểm trên Hypebol
+
+Sách 1, ví dụ 4 trang 178)
+
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	H: Hyperbol
+	M: Diem
+	a,b: Doan
+    end_objects
+
+	facts:
+		H.f1=((x^2)/4 - (y^2)/12 = 1), ["Thuoc",M,H]
+		a.length = 2*(b.length)
+		a = Doan[M,H.F2], b = Doan[M,H.F1]
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	M
+  end_goals
+
+end_exercise

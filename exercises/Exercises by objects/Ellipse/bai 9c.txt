@@ -8,8 +8,6 @@ Cho elip có phương trình (E): x^2+4y^2=25 và đường thẳng (d): 7x – 
  
 Sách 4 / 262
 ---------
-KQ câu a: (d) cắt (E) tại 2 điểm M(4;3/2) và N(3;-2).
-
 
 
 begin_exercise
@@ -24,15 +22,13 @@ begin_exercise
     objects:
       	E: Elip
 	d: DuongThang
-	M,A: Diem
+	A: Diem
     end_objects
 
 	facts:
 		E.f = (x^2 + 4*y^2 = 25)
 		A=[5,5]
-		["Thuoc",M,E],["Thuoc",M,d]
-		["Thuoc",A,d]
-		["TiepTuyen",d,E]
+		["Thuoc", A, d], ["TiepTuyen", d, E]
     end_facts
 	
     functions:

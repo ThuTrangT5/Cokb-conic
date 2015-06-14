@@ -417,6 +417,58 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 
 end proc: # Deduce_Object
 
+# Hàm áp dụng bài toán mẫu
+GeometryConicSolver[Deduce_SampleExes] := proc()
+	global Sample_Exes, Objects, OAttrs, FactSet, Fact_Kinds, Sol, DFSample;
+	local s,c, combs, replace, sample, procs, pr, doProc, identifiedFacts, params, valueP, p, result, newFacts, f, k;
+	for s in Sample_Exes do
+		# Tìm các tổ hợp đối tượng, thuộc tính thõa bài toán mẫu
+		combs := MyCombinat(s[2], [op(Objects),op(OAttrs)]);
+		for c in combs do
+			replace := {seq(s[1][i]=c[i], i=1..nops(s[1]))};
+			sample := subs(replace, s);
+			if member(sample, DFSample) then next; fi;
+			
+			# Nếu hypos của Sample không thuộc tập FactSet thì bỏ qua tổ hợp này
+			identifiedFacts := {op(Fact_Kinds[2]), op(Fact_Kinds[6])};
+			if not ({op(sample[3])} subset identifiedFacts) then next; fi;
+			
+			# Lưu các sample đã xử lý
+			DFSample := DFSample union {sample};
+			
+			#Thực hiện proc
+			procs := sample[5];
+			for pr in procs do
+				# Lấy giá trị của các tham số trong proc
+				#params := convert(op(map(s->Get_Values(s),pr[2])), string);
+				params := [];
+				for p in pr[2] do
+					valueP := Get_Values(p);
+					if valueP = "cxd" then valueP := p; fi;
+					params := [op(params), valueP];
+				od;
+				params := convert(params, string);
+				params := substring(params,2..-2);
+				
+				doProc := parse(cat(pr[1],"(", params, ")"));
+				result := eval(doProc);
+				if result <> {} then
+					newFacts := {seq(sample[4][i] = result[i], i=1..nops(sample[4]))};
+					FactSet := FactSet union newFacts;
+					for f in newFacts do
+						k := Kind_Fact(f);
+						Fact_Kinds[k] := [op(Fact_Kinds[k]), f];
+					od;
+					
+					Sol := [op(Sol), ["Bai toan mau",[],{op(sample[3])},{newFacts}]];
+				fi;
+			od; 
+		od;		
+	od;
+
+end proc:
+
+
 #ODeduce_From3s : Deduce_From3 & Deduce_From3s 
 #Deduce_From3 : sinh 1 sk2 tu 1 sk3. 
 #Neu nhieu sk3 cung sinh mot sk2 thi se gom chung vao mot buoc giai trong Sol. 
@@ -1769,6 +1821,11 @@ GeometryConicSolver[Determine]:= proc(Goal)
 			print(Sol[nops(Sol)]); fi;
 			print(Fact_Kinds[5]);
 		fi;
+		#-BUOC 0 - 
+		# Ap dung Deduce Sample sinh ra các sự kiện theo bài toán mẫu
+		Deduce_SampleExes();
+		if flag then Found:=Test_Goal(Goal,FactSet);next;fi;
+		
 		#-BUOC 1-
 		# Ap dung Deduce_From3s de sinh ra cac sk2 tu cac sk3 
 		if {op(Fact_Kinds[3])} <> DF3 then
@@ -1946,7 +2003,7 @@ end proc:#XulyGoal_Bandau
 GeometryConicSolver[Determine_Goals]:=proc()
 	local Init, Goal, time1, i;
 	local TrSolve, s;
-	global FactSet, TestF, TestR,TestOR,TestOCR,Sol,Goals,DF3, DF43,DF53,DF45, DF9, DF8,TestProp,chiso, Sols,TEST_, Goal_ThehienTrongLoiGiai;
+	global FactSet, TestF, TestR,TestOR,TestOCR,Sol,Goals,DF3, DF43,DF53,DF45, DF9, DF8,TestProp,DFSample, chiso, Sols,TEST_, Goal_ThehienTrongLoiGiai;
 	
 	time1:=time();
 	
@@ -1966,6 +2023,7 @@ GeometryConicSolver[Determine_Goals]:=proc()
 		TestProp:={}; # luu tinh trang cac tinh chat ben trong doi tuong xu ly roi
 		chiso:= 1; # luu chi so dung trong viec sinh doi tuong moi
 		Sols:={};
+		DFSample :={}; #lưu các sample đã được xủ lý
 	end: # Init 
 		
 	# Determin_Goals BODY

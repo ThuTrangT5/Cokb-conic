@@ -3,7 +3,7 @@
 
 #Reset_Onet: Hàm khởi tạo lại các biến cơ bản của một bài toán
 GeometryConicSolver[Reset_Onet] := proc () 
-	global Hypos, Goals, Objects, Obj_Types, Facts, Fact_Kinds, OAttrs, OAttr_Types, Sol, Params, Funcs, Func_Types, Functions; 
+	global Hypos, Goals, Objects, Obj_Types, Facts, Fact_Kinds, OAttrs, OAttr_Types, Sol, Params, Funcs, Func_Types, Functions, FactSet; 
 	Params := {}; 
 	Objects := []; 
 	Obj_Types := []; 
@@ -17,11 +17,13 @@ GeometryConicSolver[Reset_Onet] := proc ()
 	Funcs := []; 
 	Func_Types := []; 
 	Functions := {};
+	FactSet := {};
 end proc:#------------Reset_Onet
 
 #ReadExer: Hàm đọc mô hình bài toán
 GeometryConicSolver[ReadExer] := proc (url::string)
-	local line, fd, read_objects, read_facts, read_funcs, read_goals, read_params, update; global Hypos, Goals, Params, Objects, Obj_Types, Facts, Fact_Kinds, OAttrs, OAttr_Types, Funcs, Func_Types, Functions; 
+	local line, fd, read_objects, read_facts, read_funcs, read_goals, read_params, update; 
+	global Hypos, Goals, Params, Objects, Obj_Types, Facts, Fact_Kinds, OAttrs, OAttr_Types, Funcs, Func_Types, Functions, FactSet; 
 	
 	update := proc (ex_vars)
 		local vars, i, j; 
