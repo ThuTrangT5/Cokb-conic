@@ -23,7 +23,7 @@ end proc:#------------Reset_Onet
 #ReadExer: Hàm đọc mô hình bài toán
 GeometryConicSolver[ReadExer] := proc (url::string)
 	local line, fd, read_objects, read_facts, read_funcs, read_goals, read_params, update; 
-	global Hypos, Goals, Params, Objects, Obj_Types, Facts, Fact_Kinds, OAttrs, OAttr_Types, Funcs, Func_Types, Functions, FactSet; 
+	global Hypos, Goals, Params, Objects, Obj_Types, Facts, Fact_Kinds, OAttrs, OAttr_Types, Funcs, Func_Types, Functions, FactSet, Argumentations; 
 	
 	update := proc (ex_vars)
 		local vars, i, j; 
@@ -168,6 +168,18 @@ GeometryConicSolver[ReadExer] := proc (url::string)
 	     end do; 
 	     read_goals(); 
 	     line := readline(fd);
+	     
+	     # read Biện luận
+	     while line <> 0 and SearchText("begin_argumentations", line) = 0 do 
+		  line := readline(fd);
+	     end do;
+	     
+	     Argumentations := [];
+	     line := readline(fd);
+	     while line <> 0 and SearchText("end_argumentations", line) = 0 do
+		  Argumentations := [op(Argumentations), parse(line)];
+		  line := readline(fd);
+	     end do;
 	end do; 
 	fclose(fd); 
 end proc:#------------ReadExer

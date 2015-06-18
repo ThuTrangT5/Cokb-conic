@@ -1,0 +1,50 @@
+﻿#-----------------
+Thu Trang Tham so
+#------------------
+Cho elip (E): 4x^2+9y^2=36
+=> a. Cho điểm M(√5;m) (E) (m>0). Viết phương trình tiếp tuyến tại M
+b. Tìm m để đường thẳng (∆): mx – 2y + 5 = 0 tiếp xúc với (E). Tìm tọa độ tiếp điểm
+c. Viết phương trình tiếp tuyến với (E) biết tiếp tuyến đó vuông góc với 4x – 3y – 1 = 0
+d. Viết phương trình tiếp tuyến qua điểm I(-3; 1) với (E).
+
+Qua S(-2;3) kẻ 2 tiếp tuyến ST1, ST2 với (E). Biết T1, T2 là tiếp điểm, viết phương trình đường thẳng T1T2
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+	m
+    end_parameters
+
+
+    objects:
+      	E: Elip
+	M: Diem
+    end_objects
+
+	facts:
+		E.f = (4*x^2 + 9*y^2 = 36)
+		M = [sqrt(5), m]
+		["Thuoc", M, E]
+		m > 0
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	m
+  end_goals
+
+  begin_argumentations
+	[{m},M, E]
+  end_argumentations
+
+end_exercise

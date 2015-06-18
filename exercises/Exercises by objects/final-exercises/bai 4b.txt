@@ -1,0 +1,45 @@
+﻿#-----------------
+Thu Trang Elip bai 6
+#------------------
+Cho 2 điểm F1(-4;0) và F2(4;0) và điểm A(0;3)
+a.	Lập phương trình cính tắc của elip E qua A và có 2 tiêu điểm F1, F2
+b.	Tìm tọa độ điểm M trên (E) sao cho MF1 = 2MF2
+(Loại bài toán lập phương trình chính tắc của elip
+Sách Phương pháp giải toán hình học giải tích trong mặt phẳng, ví dụ 3, trang 187)
+
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	A,M: Diem
+	a,b: Doan
+    end_objects
+
+	facts:
+		E.F1 = [-4,0], E.F2 = [4,0],A = [0,3]
+		["Thuoc",A,E], ["Thuoc",M,E]
+		a=Doan[M,E.F1], b=Doan[M,E.F2]
+		a.length = 2*(b.length)
+		
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	E.f1, M
+  end_goals
+
+end_exercise

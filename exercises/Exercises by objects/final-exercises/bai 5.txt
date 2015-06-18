@@ -1,0 +1,48 @@
+﻿#-----------------
+Thu Trang Elip bai 8
+#------------------
+Trong mặt phẳng với hệ toạn độ Oxy, cho điểm C(2;0) và elip (E) x^2/4+y^2/1=1 . 
+Tìm tọa độ các điểm A,B thuộc (E) biết rằng :
+A, B đối xứng nhau qua trục hoành và tam giác ABC đều
+
+(Đề thi đại học khối A năm 2011 – sách 3 trang 284)
+=> Kết quả: 
+	A[2/7;  (4√3)/7], B[2/7; -(4√3)/7]
+hoặc 	A[2/7; -(4√3)/7], B[2/7;  (4√3)/7]
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	A,B,C: Diem
+	a,b,c: Doan
+    end_objects
+
+	facts:
+		E.f1 = x^2/4+y^2/1=1, C=[2,0]
+		["Thuoc",A,E], ["Thuoc",B,E]
+		A.y = -B.y
+		a=Doan[B,C], b=Doan[A,C],a=Doan[B,C]
+		a=b,b=c,c=a
+		
+    end_facts
+	
+    functions:
+
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	A,B
+  end_goals
+
+end_exercise

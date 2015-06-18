@@ -16,9 +16,9 @@ begin_samples
 		begin_goals
 			E.a, E.b, E.c, E.e
 			E.F1, E.F2, E.A1, E.A2, E.B1, E.B2			
-			E.TrucLon, E.TrucNho
+			E.TrucLon, E.TrucNho, E.TieuCu
 		end_goals
-		proc: TimThanhPhanElip(E.f)
+		proc: TimThanhPhanElip(E.f1)
 	end_sample
 
 	begin_sample

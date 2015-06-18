@@ -453,14 +453,21 @@ GeometryConicSolver[Deduce_SampleExes] := proc()
 				doProc := parse(cat(pr[1],"(", params, ")"));
 				result := eval(doProc);
 				if result <> {} then
-					newFacts := {seq(sample[4][i] = result[i], i=1..nops(sample[4]))};
-					FactSet := FactSet union newFacts;
+					newFacts := seq(sample[4][i] = result[i], i=1..nops(sample[4]));
+					FactSet := FactSet union {newFacts};
 					for f in newFacts do
 						k := Kind_Fact(f);
 						Fact_Kinds[k] := [op(Fact_Kinds[k]), f];
+						
+						if k = 3 then
+							Fact_Kinds[2] := [op(Fact_Kinds[2]), lhs(f)];
+							FactSet := FactSet union {lhs(f)};
+						fi;
 					od;
-					
-					Sol := [op(Sol), ["Bai toan mau",[],{op(sample[3])},{newFacts}]];
+										
+					#Sol := [op(Sol), ["Bai toan mau",[],{op(sample[3])},{newFacts}]];					
+					f := map(s-> s=Get_Values(s), sample[3]);
+					Sol := [op(Sol), ["Bai toan mau",[],{op(f)},{newFacts}]];
 				fi;
 			od; 
 		od;		
@@ -2034,6 +2041,7 @@ GeometryConicSolver[Determine_Goals]:=proc()
 	i := 1;
 	do
 		Goal := op(i,Goals);
+		lprint("Going to find goal = ", Goal);
 		if Test_Goal(Goal,FactSet) then 
 			if isPrint= true then printf("(@_@)Bai toan khong can giai\n");
 			fi;

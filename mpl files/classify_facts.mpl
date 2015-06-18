@@ -19,6 +19,11 @@ GeometryConicSolver[Kind_Fact]:=proc(fact)
 		if type(lhs(fact),`=`) and lhs(fact) then return 0; fi; # A = true => loại
 		if type(rhs(fact),`=`) and rhs(fact) then return 0; fi; # true = A => loại
 	fi;
+	#Trường hợp sự kiện là thông tin liên quan đến tham số
+	if (type(fact, `=`) and member(lhs(fact), Params) and Set_Vars(rhs(fact)) = {}) or
+	   (type(fact, `<`) and member(rhs(fact), Params) and Set_Vars(lhs(fact)) = {})then
+		return 3;
+	fi; 
 
 	if type(fact, list) then
 		#Loai 1: Su kien thong tin ve loai doi tuong

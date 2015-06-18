@@ -1,0 +1,42 @@
+﻿#-----------------
+Thu Trang Elip bai 10
+#------------------
+	a. Lập phương trình elip có tâm O, tiêu điểm F1(-√15;0) 
+và tiếp xúc với đường thẳng (d): x + 4y – 10 = 0
+	b.Viết phương trình tiếp tuyến của elip vuông góc với đường thẳng 
+(d): x + y + 6 = 0
+
+Sách 4 / 263
+
+---------
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	d: DuongThang
+    end_objects
+
+	facts:
+		E.F1 =[-sqrt(15),0]
+		d.f1 = (x + 4*y - 10 = 0)
+		["TiepTuyen",d,E]
+    end_facts
+	
+    functions:
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	E.f1
+  end_goals
+
+end_exercise

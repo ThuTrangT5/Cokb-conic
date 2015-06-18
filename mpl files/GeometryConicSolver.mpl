@@ -239,13 +239,13 @@ lprint("Goto TiepTuyenElipQuaM");
 	sol1 := [["Deduce_Rules"], [], {["Thuoc",M0, E]}, {pt1}];
 	
 	pt2 := df;
-	sol2 := [["Deduce_Rules"], [], {["Thuoc",M0, d], ["Thuoc",M0, E], ["TiepTuyen",d,E]}, {pt2}];
+	sol2 := [["Deduce_Rules"], [], {["Thuoc",M0, d], ["Thuoc",M0, E], ["TiepTuyen",d,E]}, {d.f=pt2}];
 	
 	pt3 := subs({x = xM, y = yM}, df);
 	sol3 := [["Deduce_Rules"], [], {["Thuoc",M, d]}, {pt3}];
 	
 	result:= [solve({pt1,pt3}, {x0, y0})];
-	sol4 := [["Deduce_EqsGoal"], [], {pt1,pt2,pt3}, {result}];
+	sol4 := [["Deduce_EqsGoal"], [], {pt1,pt3}, {result}];
 	
 	if nops(result)= 0 then return; fi; 
 		
@@ -273,10 +273,10 @@ lprint("Goto TiepTuyenElipQuaM");
 end proc:
 
 TimThanhPhanElip := proc(ptct)
-	local a,b,c,e,F1,F2,A1,A2,B1,B2,TrucLon, TrucNho;
+	local a,b,c,e,F1,F2,A1,A2,B1,B2,TrucLon,TrucNho,TieuCu;
 	
-	a := 1/(coeff(lhs(ptct),x,2));
-	b := 1/coeff(lhs(ptct),y,2);
+	a := sqrt( 1/(coeff(lhs(ptct),x,2)));
+	b := sqrt(1/coeff(lhs(ptct),y,2));
 	
 	if (convert(a-b,float)>0) then
 		c := sqrt(a^2 - b^2);		
@@ -287,6 +287,7 @@ TimThanhPhanElip := proc(ptct)
 		TrucLon := 2*b;
 		TrucNho := 2*a
 	fi;
+	TieuCu := 2*c;
 	e := c/a;
 	F1 := [-c,0];
 	F2 := [c,0];
@@ -295,5 +296,5 @@ TimThanhPhanElip := proc(ptct)
 	B1 := [-b,0];
 	B2 := [b,0];
 	lprint("GO HERE");
-	return [a,b,c,e,F1,F2,A1,A2,B1,B2,TrucLon,TrucNho];	
+	return [a,b,c,e,F1,F2,A1,A2,B1,B2,TrucLon,TrucNho,TieuCu];	
 end proc:
