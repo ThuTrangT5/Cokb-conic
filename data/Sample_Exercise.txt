@@ -1,13 +1,12 @@
-This is sample exercise file
-...
-...
-
 begin_samples
-
 	begin_sample
 		begin_objects
 			E: Elip
 		end_objects
+
+		begin_params
+			n
+		end_params
 		
 		begin_hypos
 			E.f1
@@ -18,16 +17,19 @@ begin_samples
 			E.F1, E.F2, E.A1, E.A2, E.B1, E.B2			
 			E.TrucLon, E.TrucNho, E.TieuCu
 		end_goals
-		proc: TimThanhPhanElip(E.f1)
+		proc: TimThanhPhanElip(E)
 	end_sample
 
 	begin_sample
 		begin_objects
 			E: Elip
-			d: DuongThang
 			M: Diem
+			d: DuongThang
 		end_objects
 		
+		begin_params
+		end_params
+
 		begin_hypos
 			E.f1, M
 			["Thuoc",M,d]
@@ -37,6 +39,28 @@ begin_samples
 			d.f1
 		end_goals
 		proc: TiepTuyenElipQuaM(E,M,d)
+	end_sample
+
+	begin_sample
+		begin_objects
+			E: Elip
+			M: Diem
+		end_objects
+		
+		begin_params
+			n
+		end_params
+
+		begin_hypos
+			E.a, E.e
+			["Thuoc",M,E]
+			Doan[M,E.F1] = n * Doan[M,E.F2]
+		end_hypos
+			
+		begin_goals
+			M
+		end_goals
+		proc: TimDiemThuocElip(E,M,n)
 	end_sample
 
 end_samples

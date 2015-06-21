@@ -788,7 +788,7 @@ end proc:
 # Hàm đọc cấu trúc file Sample_Exercise.txt
 GeometryConicSolver[readSampleExerciseTxt] := proc(fileName::string)
 	global Sample_Exes;
-	local fd, line, k, objName, objType, hypos, goals, procs, procName, procParams;
+	local fd, line, k, objName, objType, hypos, params, goals, procs, procName, procParams;
 	
 	Sample_Exes := [];
 	fd := fopen(fileName, READ, TEXT); 
@@ -804,6 +804,7 @@ GeometryConicSolver[readSampleExerciseTxt] := proc(fileName::string)
 		while line<>0 and SearchText("end_sample", line) = 0 do	
 			objName := [];
 			objType := [];
+			params := [];
 			hypos := [];
 			goals := [];
 			procs := [];
@@ -815,6 +816,16 @@ GeometryConicSolver[readSampleExerciseTxt] := proc(fileName::string)
 				if k > 0 then				
 					objName := [op(objName),parse(substring(line, 1..k-1))];
 					objType := [op(objType),convert(parse(substring(line, k+1..-1)), string)];
+				fi;
+				line := readline(fd);
+			od;
+			
+			
+			#read params						
+			line := readline(fd);
+			while line <> 0 and SearchText("end_params", line) = 0 do
+				if line <> "" and SearchText("begin_params", line) = 0 then
+					params := [op(params), parse(line)];
 				fi;
 				line := readline(fd);
 			od;
@@ -858,7 +869,7 @@ GeometryConicSolver[readSampleExerciseTxt] := proc(fileName::string)
 				line := readline(fd);
 			od;
 			if nops(objName) > 0 then
-				Sample_Exes := [op(Sample_Exes), [objName, objType, hypos, goals, procs]];
+				Sample_Exes := [op(Sample_Exes), [objName, objType, params, hypos, goals, procs]];
 			fi;
 			
 			line := readline(fd);

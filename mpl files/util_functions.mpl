@@ -167,27 +167,12 @@ GeometryConicSolver[Set_Vars]:=proc(expr)
 		RETURN ({});
 		
 	#Trang bổ sung kiểu indexed dạng Doan[A,B] => vars = A,B
-	(*elif type(expr,`indexed`) then
-		#Lấy tất cả tên các đối tượng lưu trong file Objects.txt
-		allObjs := {seq(Obj_Structs[i][1], i=1..nops(Obj_Structs))};
-		#lấy tên object 
-		oName := convert(op(0, expr), string);
-		
-		if member(oName, allObjs) then
-			F:={}; 
-			for i in expr do
-				if not member(i,{x,y})then
-					F:= F union Set_Vars(i);
-				fi;
-			od; 
-			return F;
-		else
-			return {expr};
-		fi;
+	elif type(expr,`indexed`) and ValidStructName_Onet(expr) then
+		return remove(type, {op(expr)}, {'constant','string'});
 	#End Bổ sung
-	*)
-	elif type(expr,`name`)or type(expr,`indexed`) or type(expr, function) then # Trang sửa chỗ này
-	#elif type(expr,`name`) or type(expr, function) then
+	
+	#elif type(expr,`name`)or type(expr,`indexed`) or type(expr, function) then # Trang sửa chỗ này
+	elif type(expr,`name`) or type(expr, function) then
 	
 		return {expr};
 	elif type(expr,`set`) or type(expr,list)then
@@ -282,4 +267,20 @@ GeometryConicSolver[CreateNewObjectsWithMultiResult]:= proc(results)
 	#--- End Update ---
 	
 	return op(newFact3s);
+end:
+# Tìm tất cả các thành phần của fact
+# VD: Doan[P, E.F2] = 3*Doan[P, E.F1] => {3, Doan[P, E.F1], Doan[P, E.F2]}
+GeometryConicSolver[GetAllFactMembers] := proc(fact)
+	local members, temp, mem, subMems;
+	
+	members := {op(fact)};
+	temp := members;
+	for mem in temp do
+		if type(mem, `*`) then
+			members := remove(has, members, mem);
+			subMems := GetAllFactMembers(mem);
+			members := {op(members), op(subMems)};
+		fi;
+	od;
+	return members;
 end:

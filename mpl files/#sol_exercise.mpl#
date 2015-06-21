@@ -1848,7 +1848,7 @@ GeometryConicSolver[Determine]:= proc(Goal)
 		Deduce_SampleExes();
 		lprint("Buoc 0 : ",time() - testTime);
 		if flag then Found:=Test_Goal(Goal,FactSet);next;fi;
-				
+		lprint("Buoc 0 : ",time() - testTime);
 		#-BUOC 1-
 		# Ap dung Deduce_From3s de sinh ra cac sk2 tu cac sk3 
 		if {op(Fact_Kinds[3])} <> DF3 then

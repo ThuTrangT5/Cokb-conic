@@ -3,5 +3,6 @@
 exerciseUrl :=  cat(packageUrl,"\\exercises\\Exercises by objects\\final-exercises");
 Reset_Onet():
 
-ReadExer(cat(exerciseUrl,"\\bai 1a.txt"));
+#ReadExer(cat(exerciseUrl,"\\bai 1a.txt"));
+ReadExer(cat(exerciseUrl,"\\bai 1c.txt"));
 

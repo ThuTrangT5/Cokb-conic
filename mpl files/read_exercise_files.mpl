@@ -133,12 +133,12 @@ GeometryConicSolver[ReadExer] := proc (url::string)
 	end proc;#------------read_goals
 	
 	# Main 
-	Reset_Onet(); 
+	Reset_Onet();
 	fd := fopen(url, READ, TEXT);
 	line := readline(fd); 
 	while line <> 0 and SearchText("begin_exercise", line) = 0 do 
 	      line := readline(fd);
-	end do; 
+	end do;
 	while line <> 0 and SearchText("end_exercise", line) = 0 do 
 	     line := readline(fd); 
 	     while line <> 0 and SearchText("begin_hypothesis", line) = 0 and SearchText("end_exercise", line) = 0 do

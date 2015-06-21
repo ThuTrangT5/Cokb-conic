@@ -216,7 +216,7 @@ DuongThang_pt2d := proc(M,N)
 end proc:
 
 TiepTuyenElipQuaM := proc(E,M,d)
-	global Objects,Obj_Types,Fact_Kinds,Sol, FactSet; 
+	global Objects,Obj_Types,Fact_Kinds,Sol, FactSet;
 	local sol0,pt1,sol1,pt2,sol2,pt3,sol3,sol4,result, ef, df, xM, yM, x1, y1, test;
 lprint("Goto TiepTuyenElipQuaM");
 
@@ -269,12 +269,13 @@ lprint("Goto TiepTuyenElipQuaM");
 		Sol := [op(Sol), [["Tao doi tuong moi"], [], {}, {M1=[x1,y1], d1,["Thuoc",M1, E], ["Thuoc", M1, d1], d1.f = subs(result[2], df)}]];
 	fi;
 	
-	return {};
+	return [];
 end proc:
 
-TimThanhPhanElip := proc(ptct)
-	local a,b,c,e,F1,F2,A1,A2,B1,B2,TrucLon,TrucNho,TieuCu;
+TimThanhPhanElip := proc(E)
+	local a,b,c,e,F1,F2,A1,A2,B1,B2,TrucLon,TrucNho,TieuCu,ptct;
 	
+	ptct := Get_Values(E.f1);
 	a := sqrt( 1/(coeff(lhs(ptct),x,2)));
 	b := sqrt(1/coeff(lhs(ptct),y,2));
 	
@@ -283,7 +284,7 @@ TimThanhPhanElip := proc(ptct)
 		TrucLon := 2*a;
 		TrucNho := 2*b
 	else
-		c := sqrt(b^2 - a^2);		
+		c := sqrt(b^2 - a^2);
 		TrucLon := 2*b;
 		TrucNho := 2*a
 	fi;
@@ -295,6 +296,44 @@ TimThanhPhanElip := proc(ptct)
 	A2 := [a,0];
 	B1 := [-b,0];
 	B2 := [b,0];
-	lprint("GO HERE");
 	return [a,b,c,e,F1,F2,A1,A2,B1,B2,TrucLon,TrucNho,TieuCu];	
+end proc:
+
+TimDiemThuocElip := proc(E,M,n)
+	#global Objects,Obj_Types,Fact_Kinds,Sol, FactSet;
+	global Sol, FactSet, Fact_Kinds;
+	local ea,ts, mf1, mf2, pt, ef, efM, xM, yM, result, s;
+	
+	ea := Get_Values(E.a);
+	ea := 4;
+	ts:= Get_Values(E.e);# tâm sai
+	mf1 := ea + ts*(M.x);
+	mf2 := ea - ts*(M.x);
+	pt := (mf1 = n * mf2);
+	xM := solve(pt,M.x);
+	
+	ef := Get_Values(E.f1);
+	efM := subs({x = M.x, y = M.y}, ef); # pt elip theo M
+	pt := subs(x = xM, ef);
+	yM := solve(pt, y);
+	
+	result := {};
+	if nops([xM]) > nops([yM]) then
+		result := { [[xM][1], yM], [[xM][2], yM] };
+	else 
+		result := { [xM, [yM][1]], [xM, [yM][2]] };
+	fi;
+	
+	s    := [[],[],[],[],[]];
+	s[1] := [["Bai toan mau"], [{["Thuoc",M,E]}, {(M.x)^2/(E.a)^2 + (M.y)^2/(E.b)^2 = 1, Doan[M,F1]= E.a + (E.e)*(M.x), Doan[M,F2]= E.a - (E.e)*(M.x)}], {["Thuoc",M,E], E.f1 = ef}, {efM, Doan[M,E.F1] = mf1, Doan[M,E.F2] = mf2}];
+	s[2] := [["Bai toan mau"],[],{Doan[M,E.F1] = mf1, Doan[M,E.F2] = mf2, Doan[M,E.F1] = n*Doan[M,E.F2]},{mf1 = n * mf2}];
+	s[3] := [["Bai toan mau"], [], {mf1 = n * mf2}, {M.x = xM}];	
+	s[4] := [["Bai toan mau"], [], {efM, M.x = xM}, {M.y = yM}];
+	s[5] := [["Bai toan mau"], [], {M.x = xM, M.y = yM}, {M = result[1], M = result[2]}];
+	
+	Sol := [op(Sol), op(s)];
+	Fact_Kinds[2] := [op(Fact_Kinds[2]), M];
+	Fact_Kinds[3] := [op(Fact_Kinds[3]), M = result[1], M = result[2]];
+	FactSet := FactSet union {M = result[1], M = result[2], M};
+	return [];
 end proc:

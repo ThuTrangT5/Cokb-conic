@@ -35,8 +35,11 @@ fi;*)
 		) then		
 		return true;
 		
-	elif ValidStructName_Onet(ex) and SubList([op(ex)],[op(OAttrs),op(Objects)]) then
-		return true; # DOAN[A,B], Doan[M,E.F1]
+	(*elif ValidStructName_Onet(ex) and SubList([op(ex)],[op(OAttrs),op(Objects)]) then
+		return true; # DOAN[A,B]
+	*)
+	elif ValidStructName_Onet(ex) then
+		return true;# cho trường hợp Doan[...] và Diem[...]		
 	fi;
 	
 	return false;
