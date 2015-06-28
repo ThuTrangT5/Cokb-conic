@@ -23,16 +23,15 @@ begin_exercise
 
     objects:
       	E: Elip
-	d1,d2: DuongThang
-	M,N: Diem
+	d: DuongThang
+	N: Diem
     end_objects
 
 	facts:
 		E.f = (x^2+4*y^2 = 25)
-		M=[4,3/2], N=[3,-2]
-		["Thuoc",M,E],["Thuoc",M,d1]
-		["Thuoc",N,E],["Thuoc",N,d2]
-		["TiepTuyen",d1,E],["TiepTuyen",d2,E]
+		N=[3,-2]		
+		["Thuoc",N,E],["Thuoc",N,d]
+		["TiepTuyen",d,E]
     end_facts
 	
     functions:
@@ -41,7 +40,7 @@ begin_exercise
   end_hypothesis
 
   begin_goals
-	d1,d2
+	d
   end_goals
 
 end_exercise

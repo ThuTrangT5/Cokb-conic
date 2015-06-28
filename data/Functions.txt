@@ -16,7 +16,11 @@
 	Real DuongThang_c(PhuongTrinh){"Object"}
 	PhuongTrinh DuongThang_f1(PhuongTrinh){"Object"}
 
+	Diem GiaoDiem(Elip, DuongThang){"doi_xung"}
+
 end_functions
+
+
 
 	PhuongTrinh Parabol_ptct(PhuongTrinh){"Object"}
 	Diem Parabol_F(PhuongTrinh){"Object"}

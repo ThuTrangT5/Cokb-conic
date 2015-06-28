@@ -1,0 +1,45 @@
+﻿#-----------------
+Thu Trang Elip bai 9
+#------------------
+Cho elip có phương trình (E): x^2+4y^2=25 và đường thẳng (d): 7x – 2y – 25 = 0
+	a.Tìm tọa độ giao điểm của (E) và (d)
+	b.Viết phương trình các tiếp tuyến của (E) tại các giao điểm trên
+	c.Viết phương trình tiếp tuyến của (E) kẻ từ A(5;5)
+ 
+Sách 4 / 262
+---------
+KQ câu a: (d) cắt (E) tại 2 điểm M(4;3/2) và N(3;-2).
+
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+    end_parameters
+
+    objects:
+      	E: Elip
+	d: DuongThang
+	M: Diem
+    end_objects
+
+	facts:
+		E.f = (x^2+4*y^2 = 25)
+		d.f = (7*x-2*y-25 = 0)
+		M=GiaoDiem(E,d)
+    end_facts
+	
+    functions:
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	M
+  end_goals
+
+end_exercise

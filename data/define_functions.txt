@@ -1,39 +1,61 @@
-﻿begin_functions
-	begin_function: Elip_ptct(pt)
-		pt: PhuongTrinh
-		return ptct:PhuongTrinh
+﻿
+
+begin_functions
+	begin_function: GiaoDiem(ef, df)
+		ef, df: PhuongTrinh
+		return M:Diem
 		
 		begin_proc
-			local f1,a,b,st,a2,a1,b2,b1,fx,fy,x0,y0,msc;
-			f1 :=  lhs(pt)-rhs(pt); (* pt quy ve dang chi co ve trai*)
-			a2 := coeff(f1,x,2);
-			b2 := coeff(f1,y,2); 
-			a1 := coeff(f1,x,1);
-			b1 := coeff(f1,y,1);
-
-			if(a1=0 and b1=0) then
-			  st := -(f1 - a2*x^2 - b2*y^2);
-			  if(st <> 1) then
-				f1 := f1/st;
-			  end if;
-
-			  a := sqrt(1/coeff(f1,x,2));
-			  b := sqrt(1/coeff(f1,y,2));
-			  return (x^2/a^2 + y^2/b^2 = 1);
-
-			else 
-			  x0 := -a1/a2/2;
-			  y0 := -b1/b2/2;
-			  fx := (x - x0 )^2;
-			  fy := (y - y0)^2;
-
-			  msc := -simplify(f1 - (a2*fx + b2*fy));
-			  f1 := a2*fx/msc + b2*fy/msc = 1;
-			  return f1;
-			end if;
+			local result;
+			result := solve({ef,df},{x,y});
+			return result;
 		end_proc
 
 	end_function
+	
+    begin_function: Elip_ptct(pt)
+        pt: PhuongTrinh
+        return ptct:PhuongTrinh
+		
+		begin_proc
+			local f1,a,b,st,a2,a1,b2,b1,fx,fy,x0,y0,msc;
+            f1 :=  lhs(pt)-rhs(pt); (* pt quy ve dang chi co ve trai*)
+            a2 := coeff(f1,x,2);
+            b2 := coeff(f1,y,2); 
+            a1 := coeff(f1,x,1);
+            b1 := coeff(f1,y,1);
+
+            if(a1=0 and b1=0) then
+              st := -(f1 - a2*x^2 - b2*y^2);
+              if(st <> 1) then
+                f1 := f1/st;
+              end if;
+
+              a := sqrt(1/coeff(f1,x,2));
+              b := sqrt(1/coeff(f1,y,2));
+              return (x^2/a^2 + y^2/b^2 = 1);
+
+            else 
+              x0 := -a1/a2/2;
+              y0 := -b1/b2/2;
+              fx := (x - x0 )^2;
+              fy := (y - y0)^2;
+
+              msc := -simplify(f1 - (a2*fx + b2*fy));
+              f1 := a2*fx/msc + b2*fy/msc = 1;
+              return f1;
+            end if;
+		end_proc
+		
+	end_function
+
+	begin_function: DuongThang_f1(f)
+		f: PhuongTrinh
+		return f1: PhuongTrinh
+		begin_proc
+			return lhs(f)- coeff(lhs(f),x,1)*x - coeff(lhs(f),y,1)*y;
+		end_proc
+	end_function	
 	
 	begin_function: Elip_a(ptct)
 		ptct: PhuongTrinh

@@ -222,30 +222,35 @@ lprint("Goto TiepTuyenElipQuaM");
 
 	ef := Get_Values(E.f1);
 	df := subs({x^2 = x*(x0), y^2 = y*(y0)}, ef);
-	xM := M[1];
-	yM := M[2];
+	xM := Get_Values(M.x);
+	yM := Get_Values(M.y);
 	
 	# Kiem tra M co thuoc E hay khong
 	test := subs({x = xM, y = yM}, lhs(ef));
 	if test = 1 then 
 		df := subs({x0 = xM, y0 = yM}, df);
-		return df;
+		
+		sol1 := [["Bai toan mau"], [],{E.f1=ef,M=[xM,yM]},{["Thuoc",M,E]} ];
+		sol2 := [["Bai toan mau"], [],{E.f1=ef, ["Thuoc", M,E], ["Thuoc", M,d], ["TiepTuyen",d,E]},{d.f = df}];
+		Sol := [op(Sol), sol1, sol2];
+		Fact_Kinds[3]:= [op(Fact_Kinds[3]), d.f = df];
+		return [];
 	fi;
 	
 	# Goi M0 la tiep diem cua E va d
-	sol0 := [["Tao doi tuong moi"], [], {}, {M0=[x0,y0],["Thuoc",M0, E], ["Thuoc", M0, d]}];
+	sol0 := [["Bai toan mau-Tao doi tuong moi"], [], {}, {M0=[x0,y0],["Thuoc",M0, E], ["Thuoc", M0, d]}];
 	
 	pt1 := subs({x = x0, y = y0}, ef);
-	sol1 := [["Deduce_Rules"], [], {["Thuoc",M0, E]}, {pt1}];
+	sol1 := [["Bai toan mau"], [], {["Thuoc",M0, E]}, {pt1}];
 	
 	pt2 := df;
-	sol2 := [["Deduce_Rules"], [], {["Thuoc",M0, d], ["Thuoc",M0, E], ["TiepTuyen",d,E]}, {d.f=pt2}];
+	sol2 := [["Bai toan mau"], [], {["Thuoc",M0, d], ["Thuoc",M0, E], ["TiepTuyen",d,E]}, {d.f=pt2}];
 	
 	pt3 := subs({x = xM, y = yM}, df);
-	sol3 := [["Deduce_Rules"], [], {["Thuoc",M, d]}, {pt3}];
+	sol3 := [["Bai toan mau"], [], {["Thuoc",M, d]}, {pt3}];
 	
 	result:= [solve({pt1,pt3}, {x0, y0})];
-	sol4 := [["Deduce_EqsGoal"], [], {pt1,pt3}, {result}];
+	sol4 := [["Bai toan mau"], [], {pt1,pt3}, {result}];
 	
 	if nops(result)= 0 then return; fi; 
 		
