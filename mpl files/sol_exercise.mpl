@@ -386,8 +386,6 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 
 			fi;
 		od;
-lprint("END Deduce_ObjRules => FACT 3 ");
-print(Fact_Kinds[3]);
 	end: #Deduce_ObjRules
 	
 	#Deduce_Objects BODY
@@ -465,10 +463,6 @@ GeometryConicSolver[Deduce_SampleExes] := proc()
 			replace := {seq(s[1][i]=c[i], i=1..nops(s[1]))};
 			sample := subs(replace, s);
 			if member(sample, DFSample) then next; fi;
-			
-			# Lưu các sample đã xử lý
-			DFSample := DFSample union {sample};
-			
 			if SubList(sample[5], Fact_Kinds[2]) then next; fi; # Goal đã có giá trị k xét nữa
 			
 			noParamFacts := remove(has,sample[4],sample[3]);
@@ -477,6 +471,9 @@ GeometryConicSolver[Deduce_SampleExes] := proc()
 			#Check facts không chứa tham số mà không thuộc tập FactSet thì bỏ qua
 			identifiedFacts := {op(Fact_Kinds[2]), op(Fact_Kinds[6])};
 			if not ({op(noParamFacts)} subset identifiedFacts) then next; fi;
+			
+			# Lưu các sample đã xử lý
+			DFSample := DFSample union {sample};
 			
 			#Check fact chứa param
 			temp := hasParamFacts;

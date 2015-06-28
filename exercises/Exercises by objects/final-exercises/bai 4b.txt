@@ -7,7 +7,7 @@ b.	Tìm tọa độ điểm M trên (E) sao cho MF1 = 2MF2
 (Loại bài toán lập phương trình chính tắc của elip
 Sách Phương pháp giải toán hình học giải tích trong mặt phẳng, ví dụ 3, trang 187)
 
-
+=> KQ câu a: E.f1 = (1/25)*x^2+(1/9)*y^2 = 1
 
 begin_exercise
 
@@ -20,12 +20,12 @@ begin_exercise
 
     objects:
       	E: Elip
-	A,M: Diem
+	M: Diem
     end_objects
 
 	facts:
-		E.F1 = [-4,0], E.F2 = [4,0],A = [0,3]
-		["Thuoc",A,E], ["Thuoc",M,E]
+		E.f1 = ((1/25)*x^2+(1/9)*y^2 = 1)
+		["Thuoc",M,E]
 		Doan[M,E.F1] = 2*(Doan[M,E.F2])
 		
     end_facts
@@ -37,7 +37,7 @@ begin_exercise
   end_hypothesis
 
   begin_goals
-	E.f1, M
+	M
   end_goals
 
 end_exercise
