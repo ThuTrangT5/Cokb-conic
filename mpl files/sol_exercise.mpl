@@ -34,7 +34,7 @@ end proc: # Deduce_Objects
 
 #Deduce_Object
 GeometryConicSolver[Deduce_Object]:=proc(d)
-	local ObjStructTemp,thaythe,FK2,FK3,FK45,Deduce_ObjRules,Deduce_ObjProp,Deduce_OConstructRela,Deduce_ObjRela1,Deduce_ObjRela21,Deduce_ObjRela22,Deduce_ObjRela3,Deduce_ObjFunc;
+	local ObjStructTemp,thaythe,FK2,FK3,FK45,Deduce_ObjConstraints,Deduce_ObjRules,Deduce_ObjProp,Deduce_OConstructRela,Deduce_ObjRela1,Deduce_ObjRela21,Deduce_ObjRela22,Deduce_ObjRela3,Deduce_ObjFunc;
 	global Fact_Kinds,FactSet,Sol,flag,TestOR,TestOCR,TestProp;
 	
 	if isPrint= true then lprint("*Deduce_Object"); fi;
@@ -47,6 +47,31 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 	FK3 := Replace_StructName(subs(thaythe,{op(Fact_Kinds[3])}));
 	FK45:= Replace_StructName(subs(thaythe,{op(Fact_Kinds[4]),op(Fact_Kinds[5])}));
 
+	Deduce_ObjConstraints := proc()
+	#Hàm này phát sinh sk loại 12 thể hiện ràng buộc nội tại của đối tượng 
+		local news, constraint, k;
+
+		# Đã xét constraint của đối tượng này
+		if {op(ObjStructTemp[4])} intersect FactSet <> {} then return; fi;
+		
+		news := {};
+		for constraint in ObjStructTemp[4] do
+			k:= Kind_Fact(constraint);
+			lprint(constraint, " => loai: ", k);
+			if k>=1 and k<=12 and not member(constraint, Fact_Kinds[k]) then
+				news := {op(news), constraint};
+				Fact_Kinds[k] := [op(Fact_Kinds[k]),constraint];
+			fi;			
+		od;
+		
+		if news <> {} then
+			FactSet:=FactSet union news; 
+			Sol:=[op(Sol),["Deduce_ObjConstraint",[],{},news]];
+			if isPrint= true then print("go to : Deduce_ObjConstraint ");
+			fi;
+		fi;
+	end:
+	
 	Deduce_ObjProp:=proc()
 		local prop,k,news;
 		if isPrint= true then print("7.1--Deduce_ObjProp ");
@@ -55,7 +80,7 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 		for prop in ObjStructTemp[6] do 
 			k:=Kind_Fact(prop);
 			#printf("kind fact => ");#printf(k);
-			if k>=1 and k<=11 and not Unify_In1(prop,Fact_Kind[k]) then
+			if k>=1 and k<=11 and not Unify_In1(prop,Fact_Kinds[k]) then
 				news:={op(news),prop};
 				Fact_Kinds[k] :=[op(Fact_Kinds[k]),prop];
 			fi;
@@ -340,7 +365,9 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 			
 				TestOR := TestOR union {[d,rule]};
 				for ex in news do
+
 					k := Kind_Fact(ex);
+			
 					if k>=1 and k<=11 and not Unify_In1(ex,FactSet) then
 						Fact_Kinds[k] :=[op(Fact_Kinds[k]),ex];
 						FactSet:=FactSet union {ex};
@@ -359,9 +386,15 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 
 			fi;
 		od;
+lprint("END Deduce_ObjRules => FACT 3 ");
+print(Fact_Kinds[3]);
 	end: #Deduce_ObjRules
 	
 	#Deduce_Objects BODY
+	#BUOC 0 -----------------------------------
+	#Sinh ra sự kiện mới loại 12 từ các ràng buộc nội tại (constraint) của đối tượng
+	Deduce_ObjConstraints();
+
 	#BUOC 1 -----------------------------------
 	#Do tim cac tinh chat ben trong cau truc doi tuong
 	if isPrint= true then lprint("Deduce_Object's body => buoc 1");
@@ -424,23 +457,26 @@ GeometryConicSolver[Deduce_SampleExes] := proc()
 	local s,t,c,f,p,k,pr, temp, thaythe, pt1, pt2, result;
 	#local s,c, combs, replace, sample, procs, pr, doProc, identifiedFacts, params, valueP, p, result, newFacts, f, k;
 	for s in Sample_Exes do
-		# Tìm các tổ hợp đối tượng thõa bài toán mẫu
-		t:= time();
+		# Tìm các tổ hợp đối tượng thõa bài toán mẫu		
 		objType := remove(has,s[2],"Real");		
 		combs := MyCombinat(objType, Objects);
-		lprint("MyCobinat time: ", time()-t);
-		
+				
 		for c in combs do
 			replace := {seq(s[1][i]=c[i], i=1..nops(s[1]))};
 			sample := subs(replace, s);
 			if member(sample, DFSample) then next; fi;
+			
+			# Lưu các sample đã xử lý
+			DFSample := DFSample union {sample};
+			
+			if SubList(sample[5], Fact_Kinds[2]) then next; fi; # Goal đã có giá trị k xét nữa
 			
 			noParamFacts := remove(has,sample[4],sample[3]);
 			hasParamFacts := select(has,sample[4],sample[3]);
 			
 			#Check facts không chứa tham số mà không thuộc tập FactSet thì bỏ qua
 			identifiedFacts := {op(Fact_Kinds[2]), op(Fact_Kinds[6])};
-			if not ({op(noParamFacts)} subset identifiedFacts) then lprint("NEXT"); next; fi;
+			if not ({op(noParamFacts)} subset identifiedFacts) then next; fi;
 			
 			#Check fact chứa param
 			temp := hasParamFacts;
@@ -456,9 +492,6 @@ GeometryConicSolver[Deduce_SampleExes] := proc()
 					fi;
 				od;
 			od;
-			
-			# Lưu các sample đã xử lý
-			DFSample := DFSample union {sample};
 						
 			#Thực hiện proc
 			procs := sample[6];
@@ -1842,13 +1875,14 @@ GeometryConicSolver[Determine]:= proc(Goal)
 			print(Sol[nops(Sol)]); fi;
 			print(Fact_Kinds[5]);
 		fi;
+		lprint("Lan: ", lan," ===================****===================");
 		#-BUOC 0 - 
 		# Ap dung Deduce Sample sinh ra các sự kiện theo bài toán mẫu
 		testTime := time();
 		Deduce_SampleExes();
 		lprint("Buoc 0 : ",time() - testTime);
 		if flag then Found:=Test_Goal(Goal,FactSet);next;fi;
-				
+		lprint("Buoc 0 : ",time() - testTime);
 		#-BUOC 1-
 		# Ap dung Deduce_From3s de sinh ra cac sk2 tu cac sk3 
 		if {op(Fact_Kinds[3])} <> DF3 then

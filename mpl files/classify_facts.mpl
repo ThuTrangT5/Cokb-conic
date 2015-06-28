@@ -8,8 +8,9 @@
 	#Replace_StructName;Replace_AttrName;Replace_Unify, IsEqual_Unify
 
 #Hàm kiểm tra loại của một sự kiện
-#Hàm nhận vào một sự kiện và xuất ra số thứ tự của sự kiện đó (1-11)
+#Hàm nhận vào một sự kiện và xuất ra số thứ tự của sự kiện đó (1-12)
 GeometryConicSolver[Kind_Fact]:=proc(fact)
+global isPrint;
 	global Objects, Obj_Types, OAttrs, OAttr_Types, Fact_Kinds, Sol; 
 	local temp, i, rightIsElement, rightVars, rightHasElement, rightIsIdentifyElement, f4new;
 	
@@ -20,10 +21,13 @@ GeometryConicSolver[Kind_Fact]:=proc(fact)
 		if type(rhs(fact),`=`) and rhs(fact) then return 0; fi; # true = A => loại
 	fi;
 	#Trường hợp sự kiện là thông tin liên quan đến tham số
-	if (type(fact, `=`) and member(lhs(fact), Params) and Set_Vars(rhs(fact)) = {}) or
+	(*if (type(fact, `=`) and member(lhs(fact), Params) and Set_Vars(rhs(fact)) = {}) or
 	   (type(fact, `<`) and member(rhs(fact), Params) and Set_Vars(lhs(fact)) = {})then
 		return 3;
-	fi; 
+	fi;*) # => bỏ trường hợp tham số
+	if type(fact, `<`) or type(fact, `<=`) then
+		return 12;
+	fi;
 
 	if type(fact, list) then
 		#Loai 1: Su kien thong tin ve loai doi tuong
@@ -58,6 +62,11 @@ GeometryConicSolver[Kind_Fact]:=proc(fact)
 		#Loai 4:Sự kiện về sự bằng nhau giữa một đối tượng hay một thuộc tính với một đối tượng hay một thuộc tính khác
 		#if Is_Element(rhs(fact)) or (type(rhs(fact),list) and Has_Element( Set_Vars(rhs(fact)) )) then return 4;
 		
+		rightIsElement := Is_Element(rhs(fact));		
+		rightVars := Set_Vars(rhs(fact));
+		rightHasElement := Has_Element(rightVars);
+		if rightIsElement or (type(rhs(fact),list) and rightHasElement) then return 4;
+		(*
 		#Trang sửa dòng trên thành 
 		rightIsElement := Is_Element(rhs(fact));
 		rightVars := Set_Vars(rhs(fact));
@@ -74,10 +83,9 @@ GeometryConicSolver[Kind_Fact]:=proc(fact)
 		fi;
 		
 		if rightIsElement or rightIsIdentifyElement or (type(rhs(fact),list) and rightHasElement) then
-			
 			#Kiểm tra nếu fact này có dạng Doan = Doan thì thêm vào Fact_Kind[3] fact Doan.length = Doan.length
 			if type_Onet(lhs(fact)) = "Doan" then
-				f4new:= lhs(fact).length = rhs(fact).length;
+				f4new := lhs(fact).length = rhs(fact).length;
 				if not member(f4new, Fact_Kinds[4]) then
 					Fact_Kinds[4] := [op(Fact_Kinds[4]), f4new];
 					Sol :=[op(Sol), ["Deduce_FromObjectDoan",[],{fact},{f4new}]]; 
@@ -85,6 +93,7 @@ GeometryConicSolver[Kind_Fact]:=proc(fact)
 			fi;
 			return 4;
 		#End Trang sửa
+		*)
 
 		#Loai 9: <doi tuong> = <ham> 
 		elif Is_Function(rhs(fact)) then return 9;

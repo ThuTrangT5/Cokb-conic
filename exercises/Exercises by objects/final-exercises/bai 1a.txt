@@ -24,7 +24,7 @@ begin_exercise
     end_objects
 
 	facts:
-		E.f = (16*x*x + 7*y*y - 112 = 0)
+		E.f = (7*x^2 + 16*y^2 - 112 = 0)
     end_facts
 	
     functions:

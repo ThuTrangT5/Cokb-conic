@@ -8,7 +8,7 @@ begin_rule 1
 		{["Thuoc",M,E]}
 	end_hypothesis_part
 	goal_part
-		{(M.x)^2/(E.a)^2+(M.y)^2/(E.b)^2=1, Doan[M,E.F1].length = (E.a) + (E.e) * (M.x), Doan[M,E.F2].length = (E.a) - (E.e)*(M.x)}
+		{(M.x)^2/(E.a)^2+(M.y)^2/(E.b)^2=1, Doan[M,E.F1] = (E.a) + (E.e) * (M.x), Doan[M,E.F2] = (E.a) - (E.e)*(M.x)}
 	end_goal_part
 end_rule
 

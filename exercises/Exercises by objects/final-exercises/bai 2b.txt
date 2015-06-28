@@ -20,13 +20,11 @@ begin_exercise
     objects:
       	E: Elip
 	M: Diem
-	a,b: Doan
     end_objects
 
 	facts:
 		E.f1=(x^2/9 + y^2 = 1), ["Thuoc",M,E]
-		a.length = 2*(b.length)
-		a = Doan[M,E.F1], b = Doan[M,E.F2]
+		Doan[M,E.F1] = 2 *(Doan[M,E.F2])
     end_facts
 	
     functions:
@@ -40,4 +38,3 @@ begin_exercise
   end_goals
 
 end_exercise
-

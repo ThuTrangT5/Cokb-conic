@@ -15,23 +15,24 @@
 GeometryConicSolver[Is_Element] := proc(ex) # <object>| <object>.<thuoc tinh>
 
 (*if(isPrint = true) then
-	#lprint("Is_Element : ex = ", ex);
-	(*#print("1. type(ex, function) = ",type(ex, function));
-	#print("2. op(0,ex) = " + op(0,ex));
-	#print("3. op(1,ex) = ",op(1,ex));
-	#print("4. member(op(1,ex), Objects) = ",member(op(1,ex), Objects));
-	#print("5. ValidStructName_Onet(op(1,ex) = "+ValidStructName_Onet(op(1,ex)));
-	#print("6. op(op(1,ex)) = ",op(op(1,ex)));
-	#print("7. SubList([op(op(1,ex))],Objects) = ", SubList([op(op(1,ex))],Objects));*)
+	lprint("Is_Element : ex = ", ex);
+	print("1. type(ex, function) = ",type(ex, function));
+	print("2. op(0,ex) = " + op(0,ex));
+	print("3. op(1,ex) = ",op(1,ex));
+	print("4. member(op(1,ex), Objects) = ",member(op(1,ex), Objects));
+	print("5. ValidStructName_Onet(op(1,ex) = "+ValidStructName_Onet(op(1,ex)));
+	print("6. op(op(1,ex)) = ",op(op(1,ex)));
+	print("7. SubList([op(op(1,ex))],Objects) = ", SubList([op(op(1,ex))],Objects));
 fi;*)
+
 	if member(ex, Objects) or member(ex, OAttrs) then
 		return true;
 		
 	elif type(ex, function) 
 		and op(0,ex)=`.` 
-		and (	member(op(1,ex), Objects) 
+		and (	member(op(1,ex), Objects) or member(op(1,op(1,ex)), Objects)
 			or (ValidStructName_Onet(op(1,ex)))
-			and SubList([op(op(1,ex))],Objects)
+			and SubList([op(op(1,ex))],Objects)			
 		) then		
 		return true;
 		

@@ -143,9 +143,25 @@ GeometryConicSolver[Xuly_Phuc]:=proc(nghiem)
 	#???
 end: # Xuly_Phuc
 
-GeometryConicSolver[MySolve]:=proc(eqns,vars)
-	local tapnghiem,nghiem, result, flag,fact, expr;
+GeometryConicSolver[MySolve]:=proc(eqns0,vars)
+	local tapnghiem,nghiem, result, flag,fact, expr, eqns, f12;
+	
+	#Nếu tập pt có nhiều biến hơn tập nghiêm thì trả về empty => Trang thêm : ?? chưa đúng lắm
+	if Set_Vars(eqns0) minus vars <> {} then return {}; fi;
+	
 	result:={};
+	
+	eqns := eqns0; 
+	#B0: Thêm các sự kiện loại 12 vào eqns nếu có liên quan đến các vars
+	for f12 in Fact_Kinds[12] do
+		if {rhs(f12)} intersect vars <> {} then
+			if type(eqns,`list`) or type(eqns,`set`) then
+				eqns := {op(eqns), f12};
+			else
+				eqns := {eqns, f12};
+			fi;
+		fi;
+	od;
 	
 	#B1: Giải phương trình hoặc hệ phương trình theo biến
 	tapnghiem := [solve(eqns, vars)]; 
