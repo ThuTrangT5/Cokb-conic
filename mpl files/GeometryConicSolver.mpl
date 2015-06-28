@@ -217,13 +217,15 @@ end proc:
 
 TiepTuyenElipQuaM := proc(E,M,d)
 	global Objects,Obj_Types,Fact_Kinds,Sol, FactSet;
-	local sol0,pt1,sol1,pt2,sol2,pt3,sol3,sol4,result, ef, df, xM, yM, x1, y1, test;
+	local sol0,pt1,sol1,pt2,sol2,pt3,sol3,sol4,result, ef, df, xM, yM, x0, y0, x1, y1, test;
 lprint("Goto TiepTuyenElipQuaM");
 
 	ef := Get_Values(E.f1);
 	df := subs({x^2 = x*(x0), y^2 = y*(y0)}, ef);
 	xM := Get_Values(M.x);
 	yM := Get_Values(M.y);
+	
+	if xM = "cxd" or yM = "cxd" then return []; fi;
 	
 	# Kiem tra M co thuoc E hay khong
 	test := subs({x = xM, y = yM}, lhs(ef));
@@ -238,7 +240,7 @@ lprint("Goto TiepTuyenElipQuaM");
 	fi;
 	
 	# Goi M0 la tiep diem cua E va d
-	sol0 := [["Bai toan mau-Tao doi tuong moi"], [], {}, {M0=[x0,y0],["Thuoc",M0, E], ["Thuoc", M0, d]}];
+	sol0 := [["Bai toan mau"], [], {"Tao doi tuong moi"}, {M0=[x0,y0],["Thuoc",M0, E], ["Thuoc", M0, d]}];
 	
 	pt1 := subs({x = x0, y = y0}, ef);
 	sol1 := [["Bai toan mau"], [], {["Thuoc",M0, E]}, {pt1}];
@@ -250,19 +252,39 @@ lprint("Goto TiepTuyenElipQuaM");
 	sol3 := [["Bai toan mau"], [], {["Thuoc",M, d]}, {pt3}];
 	
 	result:= [solve({pt1,pt3}, {x0, y0})];
-	sol4 := [["Bai toan mau"], [], {pt1,pt3}, {result}];
+	sol4 := [["Bai toan mau"], [], {pt1,pt3}, {result}];	
 	
-	if nops(result)= 0 then return; fi; 
+	if nops(result)= 0 then return []; fi; 
+
+	x0 :=  rhs(result[1][1]);
+	y0 := rhs(result[1][2]);
+	
+	if nops(result) = 2 then	
+		x1 :=  rhs(result[2][1]);
+		y1 := rhs(result[2][2]);
 		
-	Fact_Kinds[3]:= [op(Fact_Kinds[3]), M0=[rhs(result[1][1]), rhs(result[1][2])]];
-	#Fact_Kinds[3]:= [op(Fact_Kinds[3]), d.f = subs(result[1], df)];	
-	Objects := [op(Objects), M0];
-	Obj_Types := [op(Obj_Types), "Diem"];
-	Fact_Kinds[6] := [op(Fact_Kinds[6]), ["Thuoc",M0, E], ["Thuoc", M0, d]];
-	Sol := [op(Sol), sol0, sol1, sol2, sol3, sol4];
-	FactSet:= FactSet union {M0=[rhs(result[1][1]), rhs(result[1][2])]};
-	
-	if nops(result) = 2 then
+		df := {subs(result[1], d.f=pt2), subs(result[2], d.f=pt2)};
+		sol1 := [["Bai toan mau"], [], {d.f=pt2, result}, {d.f= df}];
+		sol2 := [["Bai toan mau"], [], {"Tao doi tuong moi"}, {M1=[x1,y1]}];
+		sol2 := [["Bai toan mau"], [], {d.f = {rhs(df[1]), rhs(df[2])}} , {d.f=rhs(df[1]), d1.f=rhs(df[2])}];
+		
+		Sol := [op(Sol), sol1, sol2];
+		Fact_Kinds[3]:= [op(Fact_Kinds[3]), M0=[x0,y0], M1=[x1,y1], d.f=rhs(df[1]), d1.f=rhs(df[2])];
+		Fact_Kinds[2]:= [op(Fact_Kinds[2]), M0, M1, d.f, d1.f];
+		Objects := [op(Objects), M0, M1, d1];
+		Obj_Types := [op(Obj_Types), "Diem", "Diem", "DuongThang"];
+		Fact_Kinds[6] := [op(Fact_Kinds[6]), ["Thuoc",M0, E], ["Thuoc", M0, d], ["Thuoc",M1, E], ["Thuoc", M1, d1], ["TiepTuyen", E,d1]];
+		FactSet:= FactSet union {M0=[x0,y0], M1=[x1,y1], d.f=rhs(df[1]), d1.f=rhs(df[2])};
+	else 
+		Fact_Kinds[2]:= [op(Fact_Kinds[2]), M0, d.f];
+		Fact_Kinds[3]:= [op(Fact_Kinds[3]), M0=[x0, y0], d.f = rhs(df[1])];	
+		Objects := [op(Objects), M0];
+		Obj_Types := [op(Obj_Types), "Diem"];
+		Fact_Kinds[6] := [op(Fact_Kinds[6]), ["Thuoc",M0, E], ["Thuoc", M0, d]];
+		Sol := [op(Sol), sol0, sol1, sol2, sol3, sol4];
+		FactSet:= FactSet union {M0=[rhs(result[1][1]), rhs(result[1][2])]};
+	fi;
+	(*if nops(result) = 2 then
 		x1 :=  rhs(result[2][1]);
 		y1 := rhs(result[2][2]);
 		Fact_Kinds[3]:= [op(Fact_Kinds[3]), M1=[x1,y1]];
@@ -271,8 +293,8 @@ lprint("Goto TiepTuyenElipQuaM");
 		Objects := [op(Objects), M1, d1];
 		Obj_Types := [op(Obj_Types), "Diem", "DuongThang"];
 		FactSet:= FactSet union {M1=[x1,y1]};
-		Sol := [op(Sol), [["Tao doi tuong moi"], [], {}, {M1=[x1,y1], d1,["Thuoc",M1, E], ["Thuoc", M1, d1], d1.f = subs(result[2], df)}]];
-	fi;
+		Sol := [op(Sol), [["Bai toan mau"], [], {"Tao doi tuong moi"}, {M1=[x1,y1], d1,["Thuoc",M1, E], ["Thuoc", M1, d1], d1.f = subs(result[2], df)}]];
+	fi;*)
 	
 	return [];
 end proc:
