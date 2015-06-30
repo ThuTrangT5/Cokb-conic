@@ -29,7 +29,7 @@ begin_exercise
 
 	facts:
 		E.f = (x^2+4*y^2 = 25)
-		d.f = (7*x-2*y-25 = 0)
+		d.f1 = (7*x-2*y-25 = 0)
 		M=GiaoDiem(E,d)
     end_facts
 	

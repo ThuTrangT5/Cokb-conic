@@ -2,14 +2,21 @@
 
 begin_functions
 	begin_function: GiaoDiem(ef, df)
-		ef, df: PhuongTrinh
+		ef: Elip
+		df: DuongThang
 		return M:Diem
 		
 		begin_proc
-			local result;
-			result := solve({ef,df},{x,y});
-			return result;
+			local temp;
+			temp := solve({ef,df},{x,y});
+			if temp = NULL then return NULL; fi;
+			temp:= [temp];
+		 	return {seq([seq(rhs(i), i in temp[j])], j=1..nops(temp))};
 		end_proc
+		properties
+			["Thuoc",M,ef];
+			["Thuoc",M,df]; 
+		end_properties   
 
 	end_function
 	

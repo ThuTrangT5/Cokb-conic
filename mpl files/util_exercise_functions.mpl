@@ -279,7 +279,7 @@ GeometryConicSolver[Compute_Func]:=proc(func,bien,giatri,tri)
 	global ObjsNew, OTypesNew, FactsNew,chiso;
 	
 	tinhgiatri:= proc(gt, n)
-		local result, gtt;
+		local result, gtt, g;
 		result:={}; 
 		
 		# Neu trong giatri co "xd" thi khong can tinh ham -> ham xd
@@ -297,16 +297,35 @@ GeometryConicSolver[Compute_Func]:=proc(func,bien,giatri,tri)
 		else # co gia tri xac dinh
 			gtt:= funcname(op(gt)); 
 			
+			# giá trị hàm tính được trả về sự kiện loại 6 ["Thuoc", A, E]
 			if type(gtt ,`list` )and nops(gtt)=3 then 
 				gtt[2]:=op(1,bien);
 				gtt[3]:=op(2,bien);
 			fi;
 			
 			if gtt <> NULL then
-				result:={subs(thaythe,parse(temp[1])) = gtt};
+				
+				#result:={subs(thaythe,parse(temp[1])) = gtt}; 
+				#=> Trang sửa dòng này cho hàm trả về nhiều giá trị
+				result := {};
+				if type(gtt,`set`) then
+					for g in gtt do
+						result := result union {subs(thaythe,parse(temp[1])) = g}
+					od;
+				else 
+					result:={subs(thaythe,parse(temp[1])) = gtt};
+				fi;
 				if func[3] <> [] then
 					if n = 4 then
-						result:=result union {temp[3][1]= gtt,op(temp[5])};
+						#result:=result union {temp[3][1]= gtt,op(temp[5])};
+						#=> Trang sửa dòng này cho hàm trả về nhiều giá trị
+						if type(gtt,`set`) then
+							for g in gtt do
+								result := result union {temp[3][1]= g,op(temp[5])};
+							od;
+						else
+							result:=result union {temp[3][1]= gtt,op(temp[5])};
+						fi;
 					else
 						ObjsNew:=[op(ObjsNew),temp[3][1]];
 						OTypesNew:=[op(OTypesNew),temp[3][2]];
