@@ -19,6 +19,37 @@ begin_functions
 		end_properties   
 
 	end_function
+
+	begin_function: ViTriTuongDoi(d,E)
+		d: DuongThang
+		E:Elip
+		return a1:Real
+		begin_proc
+			global Sol;
+			local kq, temp;
+			kq := {};temp :={};
+
+			kq  := {solve({d,E})};
+			
+			temp := ["Tim VTTD",[],{["Giai he phuong trinh :",{d,E},op(kq)]},[]];
+			
+			if nops(kq) =1  and type( rhs(op(2,op(kq))),`numeric`) and type( rhs(op(1,op(kq))),`numeric`)  then 
+				 kq := "Tiep xuc";
+			elif nops(kq) = 2 then 
+				kq := "Cat";
+			else
+				kq := "Khong cat";
+			fi;
+			
+			temp[4] := {kq};
+			Sol := [op(Sol),temp];
+			Classify_Facts([kq]);
+
+			return kq;
+		end_proc
+		properties
+		end_properties
+	end_function
 	
     begin_function: Elip_ptct(pt)
         pt: PhuongTrinh

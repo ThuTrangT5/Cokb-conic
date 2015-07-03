@@ -359,8 +359,79 @@ TimDiemThuocElip := proc(E,M,n)
 	s[5] := [["Bai toan mau"], [], {M.x = xM, M.y = yM}, {M = result[1], M = result[2]}];
 	
 	Sol := [op(Sol), op(s)];
-	Fact_Kinds[2] := [op(Fact_Kinds[2]), M];
+	#Fact_Kinds[2] := [op(Fact_Kinds[2]), M];
 	Fact_Kinds[3] := [op(Fact_Kinds[3]), M = result[1], M = result[2]];
-	FactSet := FactSet union {M = result[1], M = result[2], M};
+	FactSet := FactSet union {M = result[1], M = result[2]};
 	return [];
+end proc:
+
+
+GeometryConicSolver[GiaiHePhuongTrinh] := proc(hept, tapthamso)
+	local ptbac2, ptbac1, kq, pt, expr, bacpt, d1, d2, a, b, temp, d;
+	
+	ptbac2 := {};
+	ptbac1 := {};
+	kq := [{}, {}, {}, {}]; # 0, 1, 2, nhiều giao điểm theo tham số
+	
+	for pt in hept do
+		expr := lhs(pt) - rhs(pt);
+		bacpt := max(degree(expr,x), degree(expr,y));# bậc của phương trình 
+		if bacpt = 2 then
+			ptbac2 := ptbac2 union {pt};
+		elif bacpt = 1 then
+			ptbac1 := ptbac1 union {pt};
+		fi;
+	od;
+	
+	d1 := []; # d1 = [a1, b1, c1]
+	d2 := []; # d2 = [a2, b2, c2]
+		
+	if nops(ptbac2) = 0 then # Giải hệ gồm các phương trình bậc nhất
+		# Dạng tìm giao điểm của 2 đường thẳng
+		pt := ptbac1[1];
+		pt := lhs(pt) - rhs(pt);
+		a := [coeff(pt,x), coeff(pt,y), pt - coeff(pt,x)*x - coeff(pt,y)*y];
+		
+		pt := ptbac1[2];
+		pt := lhs(pt) - rhs(pt);
+		b := [coeff(pt,x), coeff(pt,y), pt - coeff(pt,x)*x - coeff(pt,y)*y];
+		
+		# Trường hợp vô nghiệm
+		temp := solve({a[1]/b[1] = a[2]/b[2], a[1]/b[1] <> a[3]/b[3]}, tapthamso);
+		if nops({temp}) > 0 then kq[1] := temp; fi;
+		
+		# Có 1 nghiệm
+		temp := solve({a[1]/b[1] <> a[2]/b[2]}, tapthamso);
+		if nops({temp}) > 0 then kq[2] := temp; fi;
+		
+		# Có vô số nghiệm
+		temp := solve({a[1]/b[1]= a[2]/b[2], a[1]/b[1] = a[3]/b[3]}, tapthamso);
+		if nops({temp}) > 0 then kq[4] := temp; fi;
+		
+	elif nops (ptbac1) = 0 then # Giải hệ gồm các phương trình bậc 2
+		
+	else # gồm 1 bậc 1 và 1 bậc 2
+		# giải pt bậc 1 theo y rồi thế vào pt bậc 2
+		temp := solve({ptbac1[1]}, y);
+		temp := subs(temp, ptbac2[1]);
+		temp := lhs(temp) - rhs(temp);
+		temp := collect(temp,x);
+		
+		# Tính giá trị delta
+		d  := (coeff(temp,x))^2 - 4*(coeff(temp,x,2))*(coeff(temp,x,0)); 
+		
+		# Có 0 nghiệm
+		temp := solve({d<0}, tapthamso);
+		if nops({temp}) > 0 then kq[1] := {temp}; fi;
+		
+		# Có 1 nghiệm
+		temp := solve({d=0}, tapthamso);
+		if nops({temp}) > 0 then kq[2] := {temp}; fi;
+		
+		# có 2 nghiệm
+		temp := solve({d>0}, tapthamso);
+		if nops({temp}) > 0 then kq[3] := {temp}; fi;
+	fi;
+	
+	return kq;
 end proc:

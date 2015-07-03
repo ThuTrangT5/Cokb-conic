@@ -147,7 +147,7 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 	end:#Deduce_OConstructRela
 
 	Deduce_ObjRela1:=proc()
-		local f,vars,fact,expr,news,ex,k;
+		local f,vars,fact,expr,news,ex,k,tt;
 		if isPrint= true then print("7.3--Deduce_ObjRela1 ");
 		fi;
 		
@@ -167,10 +167,15 @@ GeometryConicSolver[Deduce_Object]:=proc(d)
 							FactSet:=FactSet union {ex}; 
 						fi;
 					od; 
-					if (thaythe={}) then 
+					(*if (thaythe={}) then 
 						thaythe:={op(f[3]),f[6]};
 					fi; 
+					
 					Sol:=[op(Sol),["Deduce_ObjRela1",f,thaythe,news[1]]];
+					*) #=> Trang bỏ đoạn code này thành đoạn dưới
+					
+					tt:={op(f[3]),f[6]};
+					Sol:=[op(Sol),["Deduce_ObjRela1",f,tt,news[1]]];
 					flag:=true;					
 				fi; 
 			fi;
@@ -504,10 +509,10 @@ GeometryConicSolver[Deduce_SampleExes] := proc()
 						k := Kind_Fact(f);
 						Fact_Kinds[k] := [op(Fact_Kinds[k]), f];
 						
-						if k = 3 then
+						(*if k = 3 then
 							Fact_Kinds[2] := [op(Fact_Kinds[2]), lhs(f)];
 							FactSet := FactSet union {lhs(f)};
-						fi;
+						fi;*)
 					od;
 															
 					f := map(s-> s=Get_Values(s), sample[4]);
@@ -1805,21 +1810,24 @@ GeometryConicSolver[Output_Result]:=proc(Goal)
 			Solnew1:=[];
 			for i from nops(Sol) to 1 by -1 do
 				Step:=Sol[i]; 
-				if (Step[4] intersect goalvars) <> {} then 
-					if Step[1]="Determine_Goal" then 
+				
+				if  (Step[4] intersect goalvars) <> {} or Step[1]="Tim VTTD" then
+					if Step[1]="Determine_Goal" or Step[1]="Tim VTTD" then 
 						Solnew1 := [Step, op(Solnew1)];
 						Step[4] := Step[4] intersect goalvars;
 					else
 						Step[4] := Step[4] intersect goalvars;
 						Solnew1 := [Step, op(Solnew1)];
 					fi;
-					goalvars := (goalvars minus Step[4]) union Step[3];
+					goalvars := (goalvars minus Step[4]) union Step[3];					
 				fi;
+				
 			od;
 			Solnew2:=[op(Solnew2), op(Solnew1)];
 		od;
 		for i in Sol do
-			if member(i,Solnew2) then 
+			if member(i,Solnew2) then 			
+					lprint("select => ", i[4]);
 				Solnew:=[op(Solnew),i]; 
 			fi;
 		od; 
@@ -1873,13 +1881,7 @@ GeometryConicSolver[Determine]:= proc(Goal)
 			print(Fact_Kinds[5]);
 		fi;
 		lprint("Lan: ", lan," ===================****===================");
-		#-BUOC 0 - 
-		# Ap dung Deduce Sample sinh ra các sự kiện theo bài toán mẫu
-		testTime := time();
-		Deduce_SampleExes();
-		lprint("Buoc 0 : ",time() - testTime);
-		if flag then Found:=Test_Goal(Goal,FactSet);next;fi;
-		lprint("Buoc 0 : ",time() - testTime);
+		
 		#-BUOC 1-
 		# Ap dung Deduce_From3s de sinh ra cac sk2 tu cac sk3 
 		if {op(Fact_Kinds[3])} <> DF3 then
@@ -1889,6 +1891,14 @@ GeometryConicSolver[Determine]:= proc(Goal)
 			lprint("Buoc 1 : ",time() - testTime);
 			if flag then Found:=Test_Goal(Goal,FactSet);next;fi;			
 		fi;
+		
+		#-BUOC 1b - 
+		# Ap dung Deduce Sample sinh ra các sự kiện theo bài toán mẫu
+		testTime := time();
+		Deduce_SampleExes();
+		lprint("Buoc 1b : ",time() - testTime);
+		if flag then Found:=Test_Goal(Goal,FactSet);next;fi;
+		lprint("Buoc 1b : ",time() - testTime);
 		
 		#-BUOC 2- 
 		# Ap dung Deduce_From43s de sinh cac sk3 tu cac sk4 va cac sk3 bang cach the sk3 vao sk4
@@ -2123,7 +2133,7 @@ GeometryConicSolver[Determine_Goals]:=proc()
 		if i > nops(Goals) then break; fi;
 	od;
 	
-	#lprint(`Total Time`,time()-time1);
+	lprint(`Total Time`,time()-time1);
 	
 	(*for s in Sol do 
 		#print("s=",s); 

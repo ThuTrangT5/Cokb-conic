@@ -17,6 +17,8 @@
 	PhuongTrinh DuongThang_f1(PhuongTrinh){"Object"}
 
 	Diem GiaoDiem(Elip, DuongThang){"doi_xung"}
+	Void ViTriTuongDoi(DuongThang, Elip){"doi_xung"}
+
 
 end_functions
 
