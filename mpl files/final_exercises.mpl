@@ -19,6 +19,8 @@ Reset_Onet():
 #ReadExer(cat(exerciseUrl,"\\bai 9a.txt"));
 #ReadExer(cat(exerciseUrl,"\\bai 9b.txt"));
 
-ReadExer(cat(exerciseUrl,"\\bai 3a.txt"));
+#ReadExer(cat(exerciseUrl,"\\bai 3a.txt"));
+ReadExer(cat(exerciseUrl,"\\bai 3a-2.txt"));
+
 #------------chua giai duoc-----------------#
 #ReadExer(cat(exerciseUrl,"\\bai 6a.txt"));

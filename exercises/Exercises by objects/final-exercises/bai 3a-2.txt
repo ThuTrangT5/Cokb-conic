@@ -3,7 +3,7 @@ Thu Trang Elip bai 3
 #------------------
 Cho elip (E) x^2/25+y^2/4=1 và đường thẳng (d): 2x+15y-10=0
 	a. Chứng minh (d) cắt (E) tại 2 điểm phân biệt A,B. Trong đó A nằm trên trục hoành. Tìm độ dài AB
-	b. Xác định điểm C trên (E) sao cho tam giác ABC cân đỉnh A
+	b. b.	Xác định điểm C trên (E) sao cho tam giác ABC cân đỉnh A
 (Sách [13] trang 146)
 
 begin_exercise
@@ -18,11 +18,13 @@ begin_exercise
     objects:
       	E: Elip
 	d: DuongThang
+	M: Diem
     end_objects
 
 	facts:
 		E.f1 = (x^2/25 + y^2/4 = 1)
 		d.f1 = (2*x + 15*y - 10 = 0)
+		M = GiaoDiem(E,d)
     end_facts
 	
     functions:
@@ -32,7 +34,7 @@ begin_exercise
   end_hypothesis
 
   begin_goals
-	ViTriTuongDoi(d,E)
+	M
   end_goals
 
 end_exercise

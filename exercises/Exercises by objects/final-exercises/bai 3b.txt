@@ -17,12 +17,14 @@ begin_exercise
 
     objects:
       	E: Elip
-	d: DuongThang
+	A,B,C: Diem
     end_objects
 
 	facts:
 		E.f1 = (x^2/25 + y^2/4 = 1)
-		d.f1 = (2*x + 15*y - 10 = 0)
+		A=[-4,6/5], B=[5,0]
+		["Thuoc",C,E]
+		Doan[A,B]=Doan[B,C], Doan[B,C]=Doan[C,A]
     end_facts
 	
     functions:
@@ -32,7 +34,7 @@ begin_exercise
   end_hypothesis
 
   begin_goals
-	ViTriTuongDoi(d,E)
+	C
   end_goals
 
 end_exercise

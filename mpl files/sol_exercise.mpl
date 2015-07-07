@@ -1825,14 +1825,15 @@ GeometryConicSolver[Output_Result]:=proc(Goal)
 			od;
 			Solnew2:=[op(Solnew2), op(Solnew1)];
 		od;
-		for i in Sol do
+		(*for i in Sol do
 			if member(i,Solnew2) then 			
 					lprint("select => ", i[4]);
 				Solnew:=[op(Solnew),i]; 
 			fi;
 		od; 
 		
-		return(Solnew);		 
+		return(Solnew);		 *)
+		return Solnew1;
 	end:#Solution	
 	
 	if not Test_Goal(op(1,Goal), FactSet) then 
@@ -1849,7 +1850,7 @@ GeometryConicSolver[Output_Result]:=proc(Goal)
 		else 
 			#print(op(1,Goal),"=",value);
 		fi;
-		
+		#trace(Solution):
 		OptimizeSol := Solution();
 	fi;
 end proc: # Output_Result
