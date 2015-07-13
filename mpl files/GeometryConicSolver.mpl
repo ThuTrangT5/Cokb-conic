@@ -435,3 +435,82 @@ GeometryConicSolver[GiaiHePhuongTrinh] := proc(hept, tapthamso)
 	
 	return kq;
 end proc:
+
+
+bl := proc(d1,d2,m)
+	global Sol;
+	local hept, s, kq;
+	hept := {d1,d2};
+	kq := GiaiHePhuongTrinh(hept, {m});
+	
+	s    := [[],[],[]];
+	s[1] := [["BienLuan vo nghiem"], [], {hept}, {kq[1]}];
+	s[2] := [["BienLuan 1 nghiem"], [], {hept}, {kq[2]}];
+	s[3] := [["BienLuan nhieu nghiem"], [], {hept}, {kq[4]}];
+	
+	Sol := [op(Sol), op(s)];
+	return "BL";
+
+end proc:
+
+
+vttd_dt := proc(d1, d2)
+	global Params, Sol;
+	local ts, s, pt, a, b, temp, kq;
+	
+	ts := (Set_Vars(d1) union Set_Vars(d2)) intersect Params; # Tham số
+
+	
+	if ts <> {} then
+		kq := [];
+		
+		pt := lhs(d1) - rhs(d1);
+		a := [coeff(pt,x), coeff(pt,y), pt - coeff(pt,x)*x - coeff(pt,y)*y];
+		
+		pt := lhs(d2) - rhs(d2);
+		b := [coeff(pt,x), coeff(pt,y), pt - coeff(pt,x)*x - coeff(pt,y)*y];
+		
+		# Trường hợp vô nghiệm
+		temp := solve({a[1]/b[1] = a[2]/b[2], a[1]/b[1] <> a[3]/b[3]}, ts);
+		if nops({temp}) > 0 then 
+			s := [["Vi tri tuong doi"], [], [{temp},{d1,d2},"Vo nghiem"], [temp, "Song song"]];
+			Sol := [op(Sol), s];
+			kq := [op(kq), [temp, "Song song"]];
+		fi;
+		
+		# Có 1 nghiệm
+		temp := solve({a[1]/b[1] <> a[2]/b[2]}, ts);
+		if nops({temp}) > 0 then
+			s := [["Vi tri tuong doi"], [], [{temp},{d1,d2},"1 nghiem"], [temp, "Cat"]];
+			Sol := [op(Sol), s];
+			kq := [op(kq), [temp, "Cat"]];
+		fi;
+		
+		# Có vô số nghiệm
+		temp := solve({a[1]/b[1]= a[2]/b[2], a[1]/b[1] = a[3]/b[3]}, ts);
+		if nops({temp}) > 0 then
+			s := [["Vi tri tuong doi"], [], [{temp},{d1,d2},"Vo so nghiem"], [temp, "Trung"]];
+			Sol := [op(Sol), s];
+			kq := [op(kq), [temp, "Trung"]];
+		fi;
+		
+		kq := convert(kq, string);
+	else 
+		pt := solve({d1,d2}, {x,y});
+		if nops({pt}) = 0 then
+			pt := {pt};
+			kq := "Song song";
+		elif has({x = x, y = y}, pt) = true then
+			pt := remove(has, pt, {x = x, y = y});
+			kq := "Trung"		
+		else
+			kq := "Cat"
+		fi;
+		
+		s := [["Vi tri tuong doi"], [], {{d1,d2}}, {pt}];
+		Sol := [op(Sol), s];
+	fi;
+	
+	return kq;
+
+end:

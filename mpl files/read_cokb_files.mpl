@@ -411,7 +411,8 @@ GeometryConicSolver[readFunctionsTXT] := proc (fileName::string)
 		    k := i-2+SearchText(" ", line, i .. l-1); 
 		    returnz := substring(line, i .. k);
 		    funcname := convert(parse(substring(line, k+2 .. SearchText("(", line)-1)), string); 
-		    arguments := map(s->convert(s, string), [parse(substring(line, SearchText("(", line)+1 .. SearchText(")", line)-1))]);         
+		    arguments := map(s->convert(s, string), [parse(substring(line, SearchText("(", line)+1 .. SearchText(")", line)-1))]);
+			
 		    if(SearchText("{", line) = 0) then
 		       properties := {};
 		    else

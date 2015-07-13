@@ -941,7 +941,6 @@ end: # Deduce_From43s
 GeometryConicSolver[Deduce_From9]:=proc(fact9)
 	local Values, i, func,k, funcstruct,facts,Set,hasFunc,notTested;
 	global Fact_Kinds,TestF,Sol;
-	
 	if isPrint= true then 
 		#print("8.1-- vao Deduce_From9");
 		#print("fact9 = ", fact9);
@@ -1811,8 +1810,10 @@ GeometryConicSolver[Output_Result]:=proc(Goal)
 			for i from nops(Sol) to 1 by -1 do
 				Step:=Sol[i]; 
 				
-				if  (Step[4] intersect goalvars) <> {} or Step[1]="Tim VTTD" then
-					if Step[1]="Determine_Goal" or Step[1]="Tim VTTD" then 
+				if Step[1] = "Vi tri tuong doi" then
+					Solnew1 := [Step, op(Solnew1)];
+				elif  (Step[4] intersect goalvars) <> {}  then
+					if Step[1]="Determine_Goal" then 
 						Solnew1 := [Step, op(Solnew1)];
 						Step[4] := Step[4] intersect goalvars;
 					else
@@ -1823,7 +1824,7 @@ GeometryConicSolver[Output_Result]:=proc(Goal)
 				fi;
 				
 			od;
-			Solnew2:=[op(Solnew2), op(Solnew1)];
+			#Solnew2:=[op(Solnew2), op(Solnew1)];
 		od;
 		(*for i in Sol do
 			if member(i,Solnew2) then 			
@@ -2054,7 +2055,7 @@ GeometryConicSolver[Determine_Goal]:=proc(Goal)
 		if foundds then
 			Values:=Get_Values([op(Goal)]); 
 			func:=type_Onet(Goal); #vd: type_Onet(VectoDoi(a));--->["Vecto", "VectoDoi", ["Vecto"], {}]
-			funcstruct:=Find_FuncStruct(func); 
+			funcstruct:=Find_FuncStruct(func);
 			facts:= Compute_Func(funcstruct,[op(Goal)],Values);
 			TestF:=TestF union {[func,[op(Goal)]]};
 			Set:=Classify_Facts([op(facts)]);

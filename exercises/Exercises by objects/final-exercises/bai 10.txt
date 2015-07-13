@@ -1,0 +1,42 @@
+﻿#-----------------
+Thu Trang Elip bai 10
+#------------------
+Cho hai đường thẳng (d1): mx – 5y + 1 = 0 và (d2): 2x + y – 3 = 0. Định m để
+a.	(d1) cắt (d2)
+b.	(d1) // (d2)
+c.	(d1) ≡ (d2)
+(Sách [11] trang 74)
+
+
+---------
+
+
+begin_exercise
+
+  kind_ex=""
+
+  begin_hypothesis
+
+    parameters:
+	m
+    end_parameters
+
+    objects:
+	d1,d2: DuongThang	
+    end_objects
+
+	facts:
+		d1.f1 = (m*x - 5*y + 1 = 0)
+		d2.f1 = (2*x + y - 3 = 0)
+    end_facts
+	
+    functions:
+    end_functions
+
+  end_hypothesis
+
+  begin_goals
+	ViTriTuongDoi(d1,d2)
+  end_goals
+
+end_exercise

@@ -1,6 +1,4 @@
-﻿
-
-begin_functions
+﻿begin_functions
 	begin_function: GiaoDiem(ef, df)
 		ef: Elip
 		df: DuongThang
@@ -20,6 +18,72 @@ begin_functions
 
 	end_function
 
+	begin_function: ViTriTuongDoi(d1,d2)
+		d1,d2: DuongThang
+		return a:Real
+		begin_proc
+			global Params, Sol;
+			local ts, s, pt, a, b, temp, kq;
+	
+			ts := (Set_Vars(d1) union Set_Vars(d2)) intersect Params;
+
+	
+			if ts <> {} then
+				kq := [];
+		
+				pt := lhs(d1) - rhs(d1);
+				a := [coeff(pt,x), coeff(pt,y), pt - coeff(pt,x)*x - coeff(pt,y)*y];
+		
+				pt := lhs(d2) - rhs(d2);
+				b := [coeff(pt,x), coeff(pt,y), pt - coeff(pt,x)*x - coeff(pt,y)*y];
+		
+				(* Trường hợp vô nghiệm *)
+				temp := solve({a[1]/b[1] = a[2]/b[2], a[1]/b[1] <> a[3]/b[3]}, ts);
+				if nops({temp}) > 0 then 
+					s := ["Vi tri tuong doi", [], [{temp},{d1,d2},"Vo nghiem"], {"Song song", temp}];
+					Sol := [op(Sol), s];
+					kq := [op(kq), ["Song song", temp]];
+				fi;
+				
+				(* Có 1 nghiệm *)
+				temp := solve({a[1]/b[1] <> a[2]/b[2]}, ts);
+				if nops({temp}) > 0 then
+					s := ["Vi tri tuong doi", [], [{temp},{d1,d2},"1 nghiem"], {"Cat", temp}];
+					Sol := [op(Sol), s];
+					kq := [op(kq), ["Cat", temp]];
+				fi;
+				
+				(* Có vô số nghiệm *)
+				temp := solve({a[1]/b[1]= a[2]/b[2], a[1]/b[1] = a[3]/b[3]}, ts);
+				if nops({temp}) > 0 then
+					s := ["Vi tri tuong doi", [], [{temp},{d1,d2},"Vo so nghiem"], {"Trung", temp}];
+					Sol := [op(Sol), s];
+					kq := [op(kq), ["Trung", temp]];
+				fi;
+			
+				kq := convert(kq, string);
+			else 
+				pt := solve({d1,d2}, {x,y});
+				if nops({pt}) = 0 then
+					pt := {pt};
+					kq := "Song song";
+				elif has({x = x, y = y}, pt) = true then
+					pt := remove(has, pt, {x = x, y = y});
+					kq := "Trung"		
+				else
+					kq := "Cat"
+				fi;
+				
+				s := ["Vi tri tuong doi", [], {{d1,d2}}, {pt}];
+				Sol := [op(Sol), s];
+			fi;
+		
+			return kq;
+		end_proc
+		properties
+		end_properties
+	end_function
+
 	begin_function: ViTriTuongDoi(d,E)
 		d: DuongThang
 		E:Elip
@@ -31,7 +95,7 @@ begin_functions
 
 			kq  := {solve({d,E})};
 			
-			temp := ["Tim VTTD",[],{["Giai he phuong trinh :",{d,E},op(kq)]},[]];
+			temp := ["Vi tri tuong doi",[],{["Giai he phuong trinh :",{d,E},op(kq)]},[]];
 			
 			if nops(kq) =1  and type( rhs(op(2,op(kq))),`numeric`) and type( rhs(op(1,op(kq))),`numeric`)  then 
 				 kq := "Tiep xuc";

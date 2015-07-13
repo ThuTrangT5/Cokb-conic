@@ -1,5 +1,5 @@
 ﻿#-----------------
-Thu Trang Elip bai 12
+Thu Trang Elip bai 9
 #------------------
 Viết phương trình các tiếp tuyến của (E) x^2/12+y^2/4=1, biết
 	a.Tiếp tiếp song song với đường thẳng (d) : x + y = 0
